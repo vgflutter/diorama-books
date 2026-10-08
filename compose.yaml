@@ -1,0 +1,18 @@
+services:
+  diorama:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-}
+      PORT: "3000"
+      DATA_DIR: /app/data
+      DIORAMA_USER: ${DIORAMA_USER:-diorama}
+      DIORAMA_PASSWORD: ${DIORAMA_PASSWORD:-diorama}
+      GOOGLE_BOOKS_API_KEY: ${GOOGLE_BOOKS_API_KEY:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    volumes:
+      - diorama-data:/app/data
+    restart: unless-stopped
+volumes:
+  diorama-data:

@@ -1,0 +1,20 @@
+{
+  "name": "diorama-books",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.5"
+  },
+  "scripts": {
+    "start": "node --use-env-proxy server.js",
+    "dev": "node --use-env-proxy --watch server.js",
+    "test": "node --test",
+    "demo": "node scripts/build-demo.mjs",
+    "build:local": "node scripts/build-local.mjs",
+    "build": "npm run build:local"
+  },
+  "dependencies": {
+    "pg": "8.23.1"
+  }
+}

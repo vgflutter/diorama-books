@@ -1,0 +1,84 @@
+# Diorama — ordini in libreria
+
+Applicazione web in italiano per registrare richieste e assegnare le copie in arrivo ai lettori in ordine cronologico. Due versioni: pagina HTML locale con file JSON e applicazione server con SQLite oppure PostgreSQL (driver pg).
+
+## Download pronti
+
+- [Diorama locale — ZIP da estrarre e aprire](downloads/Diorama-locale.zip)
+- [Diorama server — sorgenti e configurazione Docker](downloads/Diorama-server.zip)
+
+La chat può mostrare un’anteprima HTML che non esegue JavaScript: scaricare il file o lo ZIP e aprire `Diorama.html` dal computer.
+
+## Versione locale — senza installazioni
+
+Aprire [offline/Diorama.html](offline/Diorama.html) nel browser, oppure estrarre lo ZIP locale e aprire `Diorama.html`. Login iniziale: **diorama / diorama**. La pagina è autonoma e contiene HTML, CSS e JavaScript; non serve Node.js per usarla.
+
+`Salva su file` sceglie il JSON su cui Chrome/Edge possono salvare automaticamente. `Scarica JSON` e `Apri archivio` funzionano anche nei browser che non supportano l'accesso diretto ai file. Il JSON conserva catalogo, ordini e scansioni; una copia nel browser è soltanto un supporto locale. Aprire il JSON salvato quando si riprende su un altro browser o dispositivo. Usare una sola scheda per archivio. Il login locale non cifra i file.
+
+La ricerca locale/CSV e l'inserimento manuale funzionano senza Internet. Open Library è consultato per libri mancanti quando è raggiungibile dal browser; Google Books resta nel backend per mantenere la chiave sul server.
+
+Per rigenerare la pagina da sorgenti: `npm run build:local`. Istruzioni per il libraio in [offline/LEGGIMI.txt](offline/LEGGIMI.txt).
+
+## Avvio della versione server
+
+```sh
+npm ci
+npm test
+npm start
+```
+
+L’avvio abilita il proxy di rete supportato da Node.js (`--use-env-proxy`). Porta predefinita 3000, configurabile con `PORT`. Login iniziale: utente **diorama**, password **diorama**. Il database viene creato in `data/diorama.sqlite`; non viene salvato in Git. `DATA_DIR` può indicare una directory persistente alternativa. Le sessioni durano 12 ore e terminano al riavvio.
+
+## Flusso
+
+1. Nuovo ordine: nome, cognome, ricerca per titolo/autore/ISBN, selezione dell'edizione e quantità. In alternativa inserire titolo e ISBN manualmente. La ricerca combina il catalogo della libreria, Google Books e le edizioni italiane di Open Library; un ISBN cerca esattamente la sua edizione; editore, data, lingua e ISBN aiutano a riconoscere l'edizione. Il catalogo non garantisce copertura completa: verificare sempre il codice dell'edizione richiesta.
+2. Il server salva la data UTC automaticamente e mostra la data nell'ora locale del browser. Gli ordini iniziano pendenti.
+3. Ricevi libri: mantenere il campo ISBN attivo e scansionare con un lettore che invia il codice seguito da Invio. Si può anche digitare il codice. Ogni scansione equivale a una copia.
+4. Assegnazione al più vecchio ordine ancora pendente per lo stesso ISBN. A parità di data vale l'ID dell'ordine. Stato parziale finché tutte le copie e i titoli sono ricevuti, poi evaso. Un codice senza richieste non modifica dati.
+
+ISBN-10 e ISBN-13 vengono validati e normalizzati in ISBN-13. Le operazioni di ricezione sono transazioni del backend selezionato (SQLite o PostgreSQL). La quantità ricevuta indica arrivo in libreria, non consegna fisica al cliente.
+
+## Configurazione e dati
+
+Per un utilizzo pubblico, configurare `DIORAMA_USER` e `DIORAMA_PASSWORD` con credenziali proprie, usare HTTPS e impostare `COOKIE_SECURE=true`. Non committare credenziali. Montare `DATA_DIR` su storage persistente e fare backup con strumenti compatibili con SQLite/WAL (per esempio API di backup SQLite). Non affidarsi al disco temporaneo di un hosting.
+
+È necessario accesso HTTPS a `openlibrary.org` e `www.googleapis.com` per le ricerche esterne; l'inserimento manuale funziona anche senza catalogo. I test automatici verificano database, persistenza, ISBN, FIFO, quantità, login e API. Non verificano l'hardware del lettore né la disponibilità del catalogo esterno. La pistola reale va provata con due copie dello stesso ISBN e un ordine con più titoli.
+
+
+## Catalogo scolastico italiano
+
+Open Library ha copertura limitata degli scolastici italiani. Google Books è una seconda fonte, non un catalogo completo delle adozioni. Non garantiamo che tutte le edizioni e tutti i volumi siano presenti. La libreria può importare l'esportazione del proprio fornitore in CSV, dal pannello Nuovo ordine. Questo catalogo ha priorità e funziona senza servizi esterni. Non sono stati inventati ISBN o popolati cataloghi con corrispondenze non verificate.
+
+Colonne obbligatorie: `isbn`, `titolo`. Facoltative: `autore`, `editore`, `anno`, `volume`. Separatore virgola o punto e virgola, codifica UTF-8, supporto campi fra virgolette e ISBN-10. Massimo 20000 righe e file di 4,5 MB. Una riga non valida rifiuta l'intera importazione; lo stesso ISBN aggiorna la scheda esistente. Gli ordini già salvati non cambiano. Il modello vuoto è scaricabile dall'interfaccia.
+
+Per una copertura professionale delle adozioni scolastiche serve il catalogo del fornitore o un accordo con un distributore di dati editoriali. Non è collegato alcun servizio commerciale senza credenziali e contratto. Google Books richiede una chiave del progetto Google per accesso e quota. Abilitare Books API, quindi configurare `GOOGLE_BOOKS_API_KEY` sul server, senza inserirla nel codice o nel browser.
+
+## Pubblicazione con Docker
+
+```sh
+docker compose up --build -d
+```
+
+Il servizio ascolta sulla porta 3000. Il volume `diorama-data` mantiene il database fra riavvii e aggiornamenti. Non usare `docker compose down -v` sull'archivio operativo: eliminerebbe il volume. Configurare credenziali diverse per l'uso reale, dominio/HTTPS tramite il proprio hosting e `COOKIE_SECURE=true` con HTTPS. La demo iniziale non contiene clienti reali o ordini fittizi: si possono creare ordini di prova direttamente nell'interfaccia.
+
+
+## Dati persistenti e API
+
+Il backend scrive realmente nel database selezionato, SQLite o PostgreSQL. Le tabelle `catalog`, `orders`, `items` e `receipts` conservano rispettivamente schede libro, clienti/data ordine, titoli/ISBN/quantità/metadati dell'edizione e scansioni con data e ora. Pendente, parziale ed evaso vengono ricavati dalle quantità richieste e ricevute salvate nel database: il risultato resta uguale dopo un riavvio. Il catalogo e gli ordini vengono scritti nella stessa transazione quando si salva un nuovo ordine. Una nuova importazione CSV aggiorna il catalogo ma mantiene le informazioni storiche già salvate negli ordini.
+
+La ricerca locale comprende titolo, autore, editore, anno e volume, con più parole chiave. I libri inseriti manualmente o scelti dalle API vengono conservati nel catalogo alla creazione dell'ordine, senza sovrascrivere le schede già importate dal fornitore.
+
+`GET /api/books?q=...` restituisce `{books, warnings}`: eventuali problemi di una fonte esterna sono visibili anche quando l'altra fonte risponde. `GET /api/catalog` include numero di libri e stato osservato delle fonti, senza mostrare chiavi. Tutti gli endpoint dati richiedono login.
+
+La chiave Google resta sul server. In Docker Compose viene letta da `GOOGLE_BOOKS_API_KEY` nell'ambiente o nel file locale `.env`; non committare il file. Nelle impostazioni cloud è predisposto un campo sicuro con lo stesso nome. Consultare [la verifica delle API](docs/api-cataloghi.md) per risultati e limiti attuali.
+
+
+## PostgreSQL
+
+Con `DATABASE_URL` configurata, il server usa PostgreSQL con il driver `pg`; senza, usa SQLite. I dati non passano automaticamente fra archivi diversi. Dettagli e verifica di concorrenza in [docs/postgresql.md](docs/postgresql.md).
+
+## Build e verifica
+
+`npm run build` genera l'HTML locale. `npm test` esegue le verifiche dei backend SQLite, JSON e API; il test PostgreSQL richiede il database di prova dedicato. La build locale è stata aperta nel browser direttamente da file, verificando CSV, ordine, scansione, download di un JSON reale e ripristino in un browser senza dati precedenti.
+
+Per rigenerare i pacchetti ZIP dopo `npm run build`, eseguire `python3 scripts/package-release.py` (Python 3 richiesto soltanto per creare gli ZIP).

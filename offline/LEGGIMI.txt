@@ -1,0 +1,34 @@
+DIORAMA — VERSIONE LOCALE
+
+1. Estrai tutti i file dello ZIP in una cartella.
+2. Apri Diorama.html con Chrome, Edge, Firefox o Safari.
+   L’anteprima nella chat può bloccare JavaScript: aprire il file dal computer.
+3. Accedi con nome utente diorama e password diorama.
+4. Premi Salva su file per scegliere diorama-archivio.json.
+   Chrome/Edge supportano il salvataggio automatico nel file scelto.
+   Se il browser non lo supporta, usa Scarica JSON dopo le modifiche.
+5. Al riavvio usa Apri archivio e scegli il JSON salvato.
+
+Il file JSON contiene catalogo, clienti, ordini, quantità e scansioni.
+La copia nel browser aiuta a continuare nella stessa sessione, ma per
+conservare e trasferire i dati devi salvare il file JSON e farne copie.
+Non modificare lo stesso archivio da più schede/browser contemporaneamente.
+
+CATALOGO
+Nuovo ordine → Importa il catalogo scolastico del fornitore.
+CSV UTF-8 con colonne isbn e titolo; facoltative: autore, editore, anno, volume.
+Puoi usare il modello CSV vuoto oppure il piccolo catalogo di esempio.
+Gli esempi sono edizioni 2005/2008, non adozioni scolastiche aggiornate.
+Se il libro manca, si prova Open Library (serve Internet), oppure si può
+inserire manualmente titolo e ISBN. La chiave Google Books resta nella
+versione server e non è inclusa nell'HTML.
+
+RICEZIONE
+Ricevi libri → posiziona il cursore nel campo ISBN.
+La pistola deve inviare ISBN + Invio. Puoi anche digitare l'ISBN e Invio.
+Ogni scansione equivale a una copia, assegnata al primo cliente in attesa.
+
+Questa versione lavora su un dispositivo e non richiede installazioni.
+Il login locale gestisce l'interfaccia; i file JSON restano leggibili dal
+sistema operativo. Per più postazioni e accesso centralizzato usa la
+versione server con PostgreSQL o SQLite.
