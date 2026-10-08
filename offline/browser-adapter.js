@@ -27,12 +27,15 @@ async function api(path,method='GET',data){
   catch{return {books:[],warnings:['Catalogo online non disponibile. Importa il CSV o inserisci il libro manualmente.']};}
  }
  if(path==='orders'&&method==='GET')return archiveOrders(archiveState);
+ if(path==='anomalies'&&method==='GET')return archiveAnomalies(archiveState);
+ const archiveMatch=/^orders\/(\d+)\/archive$/.exec(path);
+ if(archiveMatch&&method==='POST')return mutateArchive(async()=>{const {next,result}=archiveOrder(archiveState,archiveMatch[1]);await commitArchive(next);return result;});
  if(path==='orders'&&method==='POST')return mutateArchive(async()=>{const {next,id}=archiveCreate(archiveState,data,normalize);await commitArchive(next);return {id};});
- if(path==='scan')return mutateArchive(async()=>{const {next,result}=archiveScan(archiveState,data.isbn,normalize);if(result)await commitArchive(next);return {result};});
+ if(path==='scan')return mutateArchive(async()=>{const {next,result}=archiveScan(archiveState,data.isbn,normalize);await commitArchive(next);return {result};});
  throw Error('Operazione non disponibile');
 }
 function requireArchiveLogin(){if(!archiveAuthenticated){toast('Accedi con diorama / diorama.');return false;}return true;}
-function downloadArchive(){if(!requireArchiveLogin())return;const blob=new Blob([JSON.stringify(archiveState,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='diorama-archivio.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);archiveNotice('Download avviato: conserva diorama-archivio.json e riaprilo per continuare.');}
+function downloadArchive(){if(!requireArchiveLogin())return;const blob=new Blob([JSON.stringify(archiveState,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='dioramaBooks-archivio.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);archiveNotice('Download avviato: conserva dioramaBooks-archivio.json e riaprilo per continuare.');}
 async function openArchive(file,handle=null){
  if(file.size>50000000)throw Error('Archivio troppo grande: massimo 50 MB');
  const next=readArchive(await file.text(),normalize);

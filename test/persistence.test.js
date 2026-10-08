@@ -13,14 +13,14 @@ test('Ordini, catalogo CSV, metadati di edizione e ricevimenti persistono; reimp
   catalog.import(parseCatalogCSV('isbn;titolo;volume;editore;anno\n9788808077356;Matematica;3;Editore di prova;2008'));
   const selected=catalog.search('matematica 3')[0];assert.ok(selected);assert.equal(selected.volume,'3');
   const id=store.create({first_name:'Prova',last_name:'Lettore',items:[{...selected,quantity:2}]});
-  assert.equal(store.orders()[0].status,'pendente');store.scan(selected.isbn);assert.equal(store.orders()[0].status,'parziale');
+  assert.equal(store.orders()[0].status,'pendente');store.scan(selected.isbn);assert.equal(store.orders()[0].status,'pendente');
   store.create({first_name:'Altro',last_name:'Cliente',items:[{title:'Il barone rampante',isbn:'9788806031329',quantity:1,source:'Open Library',year:'1971'}]});
   assert.equal(catalog.count(),2);
   catalog.import(parseCatalogCSV('isbn;titolo;volume;editore;anno\n9788808077356;Titolo aggiornato;3;Editore nuovo;2009'));
   assert.equal(store.orders().find(o=>o.id===id).items[0].title,'Matematica');
   store.db.close();store=createStore(path,{onOrderItems:items=>catalog.remember(items)});catalog=localCatalog(store.db);
   assert.equal(catalog.count(),2);assert.equal(catalog.search('',selected.isbn)[0].title,'Titolo aggiornato');
-  let order=store.orders().find(o=>o.id===id);assert.equal(order.status,'parziale');assert.equal(order.items[0].volume,'3');assert.equal(order.items[0].publisher,'Editore di prova');assert.equal(order.items[0].year,'2008');
+  let order=store.orders().find(o=>o.id===id);assert.equal(order.status,'pendente');assert.equal(order.items[0].volume,'3');assert.equal(order.items[0].publisher,'Editore di prova');assert.equal(order.items[0].year,'2008');
   store.scan(selected.isbn);assert.equal(store.orders().find(o=>o.id===id).status,'evaso');
   assert.equal(store.db.prepare('SELECT COUNT(*) AS n FROM receipts').get().n,2);
  }finally{store.db.close();rmSync(dir,{recursive:true});}

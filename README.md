@@ -1,19 +1,19 @@
-# Diorama — ordini in libreria
+# dioramaBooks — ordini in libreria
 
 Applicazione web in italiano per registrare richieste e assegnare le copie in arrivo ai lettori in ordine cronologico. Due versioni: pagina HTML locale con file JSON e applicazione server con SQLite oppure PostgreSQL (driver pg).
 
 ## Download pronti
 
-- [Diorama locale — ZIP da estrarre e aprire](downloads/Diorama-locale.zip)
-- [Diorama server — sorgenti e configurazione Docker](downloads/Diorama-server.zip)
+- [dioramaBooks locale — ZIP da estrarre e aprire](downloads/dioramaBooks-locale.zip)
+- [dioramaBooks server — sorgenti e configurazione Docker](downloads/dioramaBooks-server.zip)
 
-La chat può mostrare un’anteprima HTML che non esegue JavaScript: scaricare il file o lo ZIP e aprire `Diorama.html` dal computer.
+La chat può mostrare un’anteprima HTML che non esegue JavaScript: scaricare il file o lo ZIP e aprire `dioramaBooks.html` dal computer.
 
 ## Versione locale — senza installazioni
 
-Aprire [offline/Diorama.html](offline/Diorama.html) nel browser, oppure estrarre lo ZIP locale e aprire `Diorama.html`. Login iniziale: **diorama / diorama**. La pagina è autonoma e contiene HTML, CSS e JavaScript; non serve Node.js per usarla.
+Aprire [offline/dioramaBooks.html](offline/dioramaBooks.html) nel browser, oppure estrarre lo ZIP locale e aprire `dioramaBooks.html`. Login iniziale: **diorama / diorama**. La pagina è autonoma e contiene HTML, CSS e JavaScript; non serve Node.js per usarla.
 
-`Salva su file` sceglie il JSON su cui Chrome/Edge possono salvare automaticamente. `Scarica JSON` e `Apri archivio` funzionano anche nei browser che non supportano l'accesso diretto ai file. Il JSON conserva catalogo, ordini e scansioni; una copia nel browser è soltanto un supporto locale. Aprire il JSON salvato quando si riprende su un altro browser o dispositivo. Usare una sola scheda per archivio. Il login locale non cifra i file.
+`Salva su file` sceglie il JSON su cui Chrome/Edge possono salvare automaticamente. `Scarica JSON` e `Apri archivio` funzionano anche nei browser che non supportano l'accesso diretto ai file. Il JSON conserva catalogo, ordini, archiviazioni, scansioni e anomalie; una copia nel browser è soltanto un supporto locale. Aprire il JSON salvato quando si riprende su un altro browser o dispositivo. Usare una sola scheda per archivio. Il login locale non cifra i file. Gli archivi JSON precedenti sono compatibili: i nuovi campi vengono aggiunti alla lettura.
 
 La ricerca locale/CSV e l'inserimento manuale funzionano senza Internet. Open Library è consultato per libri mancanti quando è raggiungibile dal browser; Google Books resta nel backend per mantenere la chiave sul server.
 
@@ -34,7 +34,8 @@ L’avvio abilita il proxy di rete supportato da Node.js (`--use-env-proxy`). Po
 1. Nuovo ordine: nome, cognome, ricerca per titolo/autore/ISBN, selezione dell'edizione e quantità. In alternativa inserire titolo e ISBN manualmente. La ricerca combina il catalogo della libreria, Google Books e le edizioni italiane di Open Library; un ISBN cerca esattamente la sua edizione; editore, data, lingua e ISBN aiutano a riconoscere l'edizione. Il catalogo non garantisce copertura completa: verificare sempre il codice dell'edizione richiesta.
 2. Il server salva la data UTC automaticamente e mostra la data nell'ora locale del browser. Gli ordini iniziano pendenti.
 3. Ricevi libri: mantenere il campo ISBN attivo e scansionare con un lettore che invia il codice seguito da Invio. Si può anche digitare il codice. Ogni scansione equivale a una copia.
-4. Assegnazione al più vecchio ordine ancora pendente per lo stesso ISBN. A parità di data vale l'ID dell'ordine. Stato parziale finché tutte le copie e i titoli sono ricevuti, poi evaso. Un codice senza richieste non modifica dati.
+4. Assegnazione al più vecchio ordine ancora pendente per lo stesso ISBN. A parità di data vale l'ID dell'ordine. Lo stato resta **pendente** finché mancano copie o titoli, con il progresso delle quantità visibile. La scansione dell’ultima copia rende l’ordine **evaso**. Il pulsante **Archivia**, disponibile solo per gli evasi, lo rende **archiviato** e conserva la data di archiviazione.
+5. Un ISBN valido senza copie pendenti registra una **anomalia** con ISBN, data e ora. Il registro Anomalie resta disponibile dopo il riavvio. Non vengono modificate quantità degli ordini; un codice non valido viene segnalato come errore e non registrato come libro.
 
 ISBN-10 e ISBN-13 vengono validati e normalizzati in ISBN-13. Le operazioni di ricezione sono transazioni del backend selezionato (SQLite o PostgreSQL). La quantità ricevuta indica arrivo in libreria, non consegna fisica al cliente.
 
@@ -64,11 +65,11 @@ Il servizio ascolta sulla porta 3000. Il volume `diorama-data` mantiene il datab
 
 ## Dati persistenti e API
 
-Il backend scrive realmente nel database selezionato, SQLite o PostgreSQL. Le tabelle `catalog`, `orders`, `items` e `receipts` conservano rispettivamente schede libro, clienti/data ordine, titoli/ISBN/quantità/metadati dell'edizione e scansioni con data e ora. Pendente, parziale ed evaso vengono ricavati dalle quantità richieste e ricevute salvate nel database: il risultato resta uguale dopo un riavvio. Il catalogo e gli ordini vengono scritti nella stessa transazione quando si salva un nuovo ordine. Una nuova importazione CSV aggiorna il catalogo ma mantiene le informazioni storiche già salvate negli ordini.
+Il backend scrive realmente nel database selezionato, SQLite o PostgreSQL. Le tabelle `catalog`, `orders`, `items` e `receipts` conservano rispettivamente schede libro, clienti/data ordine, titoli/ISBN/quantità/metadati dell'edizione e scansioni con data e ora. Gli unici tre stati sono pendente, evaso e archiviato. Le quantità ricevute determinano i primi due; `orders.archived_at` registra il passaggio allo storico. La tabella `anomalies` conserva ogni scansione senza un ordine pendente. Stati, ricevimenti e anomalie restano disponibili dopo un riavvio. Il catalogo e gli ordini vengono scritti nella stessa transazione quando si salva un nuovo ordine. Una nuova importazione CSV aggiorna il catalogo ma mantiene le informazioni storiche già salvate negli ordini.
 
 La ricerca locale comprende titolo, autore, editore, anno e volume, con più parole chiave. I libri inseriti manualmente o scelti dalle API vengono conservati nel catalogo alla creazione dell'ordine, senza sovrascrivere le schede già importate dal fornitore.
 
-`GET /api/books?q=...` restituisce `{books, warnings}`: eventuali problemi di una fonte esterna sono visibili anche quando l'altra fonte risponde. `GET /api/catalog` include numero di libri e stato osservato delle fonti, senza mostrare chiavi. Tutti gli endpoint dati richiedono login.
+`GET /api/books?q=...` restituisce `{books, warnings}`: eventuali problemi di una fonte esterna sono visibili anche quando l'altra fonte risponde. `GET /api/catalog` include numero di libri e stato osservato delle fonti, senza mostrare chiavi. `POST /api/orders/:id/archive` archivia un ordine interamente ricevuto; `GET /api/anomalies` legge il registro delle copie senza richiesta. Tutti gli endpoint dati richiedono login.
 
 La chiave Google resta sul server. In Docker Compose viene letta da `GOOGLE_BOOKS_API_KEY` nell'ambiente o nel file locale `.env`; non committare il file. Nelle impostazioni cloud è predisposto un campo sicuro con lo stesso nome. Consultare [la verifica delle API](docs/api-cataloghi.md) per risultati e limiti attuali.
 

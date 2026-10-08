@@ -1,5 +1,22 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {isbn} from '../store.js';
-import {emptyArchive,readArchive,archiveCreate,archiveScan,archiveImport,archiveOrders,archiveSearch} from '../offline/archive.js';
-test('Archivio JSON: ordini FIFO, copie, snapshot edizione e roundtrip del file',()=>{let state=archiveImport(emptyArchive(),[{title:'Matematica',isbn:'9788808077356',volume:'3',publisher:'Zanichelli',year:'2008'}]);const selected=archiveSearch(state,'matematica 3',isbn)[0];state=archiveCreate(state,{first_name:'Anna',last_name:'Primo',items:[{...selected,quantity:2}]},isbn).next;state=archiveCreate(state,{first_name:'Luca',last_name:'Secondo',items:[{...selected,quantity:1}]},isbn).next;let scan=archiveScan(state,selected.isbn,isbn);assert.equal(scan.result.first_name,'Anna');state=scan.next;assert.equal(archiveOrders(state).find(o=>o.id===1).status,'parziale');state=readArchive(JSON.stringify(state),isbn);scan=archiveScan(state,selected.isbn,isbn);assert.equal(scan.result.first_name,'Anna');scan=archiveScan(scan.next,selected.isbn,isbn);assert.equal(scan.result.first_name,'Luca');state=scan.next;assert.ok(archiveOrders(state).every(o=>o.status==='evaso'));assert.equal(archiveScan(state,selected.isbn,isbn).result,null);state=archiveImport(state,[{...selected,title:'Nuova edizione'}]);assert.equal(state.orders[0].items[0].title,'Matematica');assert.equal(readArchive(JSON.stringify(state),isbn).receipts.length,3);});
+import {emptyArchive,readArchive,archiveCreate,archiveScan,archiveImport,archiveOrders,archiveSearch,archiveOrder,archiveAnomalies} from '../offline/archive.js';
+test('Archivio JSON: ordini FIFO, copie, snapshot edizione e roundtrip del file',()=>{let state=archiveImport(emptyArchive(),[{title:'Matematica',isbn:'9788808077356',volume:'3',publisher:'Zanichelli',year:'2008'}]);const selected=archiveSearch(state,'matematica 3',isbn)[0];state=archiveCreate(state,{first_name:'Anna',last_name:'Primo',items:[{...selected,quantity:2}]},isbn).next;state=archiveCreate(state,{first_name:'Luca',last_name:'Secondo',items:[{...selected,quantity:1}]},isbn).next;let scan=archiveScan(state,selected.isbn,isbn);assert.equal(scan.result.first_name,'Anna');state=scan.next;assert.equal(archiveOrders(state).find(o=>o.id===1).status,'pendente');state=readArchive(JSON.stringify(state),isbn);scan=archiveScan(state,selected.isbn,isbn);assert.equal(scan.result.first_name,'Anna');scan=archiveScan(scan.next,selected.isbn,isbn);assert.equal(scan.result.first_name,'Luca');state=scan.next;assert.ok(archiveOrders(state).every(o=>o.status==='evaso'));assert.equal(archiveScan(state,selected.isbn,isbn).result,null);state=archiveImport(state,[{...selected,title:'Nuova edizione'}]);assert.equal(state.orders[0].items[0].title,'Matematica');assert.equal(readArchive(JSON.stringify(state),isbn).receipts.length,3);});
 test('JSON errato o incoerente viene rifiutato prima della sostituzione dell’archivio',()=>{assert.throws(()=>readArchive('{}',isbn));const state=archiveCreate(emptyArchive(),{first_name:'A',last_name:'B',items:[{title:'Libro',isbn:'9788806031329',quantity:1}]},isbn).next;state.orders[0].items[0].received=1;assert.throws(()=>readArchive(state,isbn),/scansioni/);assert.throws(()=>archiveCreate(emptyArchive(),{first_name:'A',last_name:'B',items:[{title:'Libro',isbn:'9788806031329',quantity:0}]},isbn));});
+test('JSON: tre stati, archivio storico, anomalie e apertura dei vecchi file',()=>{
+ let state=archiveCreate(emptyArchive(),{first_name:'Anna',last_name:'Prima',items:[{title:'Libro',isbn:'9780140328721',quantity:2}]},isbn).next;
+ const legacy=structuredClone(state);delete legacy.anomalies;delete legacy.nextAnomaly;delete legacy.orders[0].archived_at;
+ state=readArchive(legacy,isbn);assert.deepEqual(state.anomalies,[]);
+ assert.throws(()=>archiveOrder(state,1),/pendente/);
+ state=archiveScan(state,'0140328726',isbn).next;assert.equal(archiveOrders(state)[0].status,'pendente');
+ state=archiveScan(state,'9780140328721',isbn).next;assert.equal(archiveOrders(state)[0].status,'evaso');
+ state=archiveOrder(state,1).next;const archivedAt=state.orders[0].archived_at;
+ assert.equal(archiveOrders(state)[0].status,'archiviato');assert.equal(archiveOrder(state,1).result.archived_at,archivedAt);
+ state=archiveScan(state,'9780140328721',isbn).next;state=archiveScan(state,'9788806031329',isbn).next;
+ const reopened=readArchive(JSON.stringify(state),isbn);
+ assert.equal(archiveOrders(reopened)[0].status,'archiviato');assert.equal(archiveAnomalies(reopened).length,2);
+ assert.equal(reopened.receipts.length,2);assert.equal(reopened.nextAnomaly,3);
+ const invalid=structuredClone(reopened);invalid.orders[0].items[0].received=1;
+ assert.throws(()=>readArchive(invalid,isbn),/archiviato/);
+ invalid.orders[0].items[0].received=2;invalid.anomalies[0].isbn='bad';assert.throws(()=>readArchive(invalid,isbn),/ISBN/);
+});

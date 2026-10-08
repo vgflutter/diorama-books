@@ -1,15 +1,15 @@
-DIORAMA — VERSIONE LOCALE
+dioramaBooks — VERSIONE LOCALE
 
 1. Estrai tutti i file dello ZIP in una cartella.
-2. Apri Diorama.html con Chrome, Edge, Firefox o Safari.
+2. Apri dioramaBooks.html con Chrome, Edge, Firefox o Safari.
    L’anteprima nella chat può bloccare JavaScript: aprire il file dal computer.
 3. Accedi con nome utente diorama e password diorama.
-4. Premi Salva su file per scegliere diorama-archivio.json.
+4. Premi Salva su file per scegliere dioramaBooks-archivio.json.
    Chrome/Edge supportano il salvataggio automatico nel file scelto.
    Se il browser non lo supporta, usa Scarica JSON dopo le modifiche.
 5. Al riavvio usa Apri archivio e scegli il JSON salvato.
 
-Il file JSON contiene catalogo, clienti, ordini, quantità e scansioni.
+Il file JSON contiene catalogo, clienti, ordini, quantità, scansioni, archiviazioni e anomalie.
 La copia nel browser aiuta a continuare nella stessa sessione, ma per
 conservare e trasferire i dati devi salvare il file JSON e farne copie.
 Non modificare lo stesso archivio da più schede/browser contemporaneamente.
@@ -26,7 +26,20 @@ versione server e non è inclusa nell'HTML.
 RICEZIONE
 Ricevi libri → posiziona il cursore nel campo ISBN.
 La pistola deve inviare ISBN + Invio. Puoi anche digitare l'ISBN e Invio.
-Ogni scansione equivale a una copia, assegnata al primo cliente in attesa.
+Ogni scansione equivale a una copia, assegnata al primo cliente in attesa
+per lo stesso ISBN, rispettando data e ordine di inserimento.
+
+STATI DELL’ORDINE
+Pendente: richiesta registrata dal libraio; mancano ancora libri o copie.
+Evaso: tutte le copie richieste sono state abbinate tramite scansione.
+Archiviato: premi Archivia su un ordine evaso per conservarlo nello storico.
+Con più libri o copie, le ricezioni incomplete restano pendenti: il progresso
+compare nelle righe dell’ordine e non è un quarto stato.
+
+ANOMALIE
+Un ISBN valido senza richieste pendenti registra una copia nel pannello
+Anomalie, con ISBN, data e ora. Il registro viene salvato nel JSON.
+Gli archivi JSON delle versioni precedenti possono essere riaperti.
 
 Questa versione lavora su un dispositivo e non richiede installazioni.
 Il login locale gestisce l'interfaccia; i file JSON restano leggibili dal

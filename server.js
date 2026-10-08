@@ -28,13 +28,16 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/api/logout'&&req.method==='POST'){sessions.delete(token);res.setHeader('Set-Cookie','session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0');return json(res,200,{ok:true});}
  if(url.pathname==='/api/orders'&&req.method==='GET')return json(res,200,await store.orders());
  if(url.pathname==='/api/orders'&&req.method==='POST')return json(res,201,{id:await store.create(await body(req))});
+ const archiveMatch=/^\/api\/orders\/(\d+)\/archive$/.exec(url.pathname);
+ if(archiveMatch&&req.method==='POST')return json(res,200,await store.archive(archiveMatch[1]));
+ if(url.pathname==='/api/anomalies'&&req.method==='GET')return json(res,200,await store.anomalies());
  if(url.pathname==='/api/scan'&&req.method==='POST'){const result=await store.scan((await body(req)).isbn);return json(res,200,{result});}
  if(url.pathname==='/api/catalog'&&req.method==='GET')return json(res,200,{count:await catalog.count(),providers:providerStatus()});
  if(url.pathname==='/api/catalog/import'&&req.method==='POST'){const data=await body(req);try{return json(res,200,{imported:await catalog.import(parseCatalogCSV(data.csv)),count:await catalog.count()});}catch(e){return json(res,400,{error:e.message});}}
  if(url.pathname==='/api/books'&&req.method==='GET'){const q=(url.searchParams.get('q')||'').trim();if(q.length<3||q.length>200)return json(res,400,{error:'Inserisci almeno 3 caratteri'});try{return json(res,200,await searchCatalog(q,catalog));}catch(e){return json(res,502,{error:e.message,warnings:e.warnings||[]});}}
  return json(res,404,{error:'Operazione non trovata'});
- }catch(e){if(e instanceof SyntaxError)return json(res,400,{error:'Richiesta non valida'});if(/ISBN|Inserisci|Aggiungi|Titolo|Richiesta/.test(e.message))return json(res,400,{error:e.message});console.error(e);return json(res,500,{error:'Errore interno. Riprova.'});}});
-server.listen(Number(process.env.PORT||3000),'0.0.0.0',()=>console.log('Diorama in ascolto sulla porta '+(process.env.PORT||3000)));
+ }catch(e){if(e instanceof SyntaxError)return json(res,400,{error:'Richiesta non valida'});if(/ISBN|Inserisci|Aggiungi|Titolo|Richiesta|Ordine/.test(e.message))return json(res,400,{error:e.message});console.error(e);return json(res,500,{error:'Errore interno. Riprova.'});}});
+server.listen(Number(process.env.PORT||3000),'0.0.0.0',()=>console.log('dioramaBooks in ascolto sulla porta '+(process.env.PORT||3000)));
 setInterval(()=>{const now=Date.now();for(const [k,v]of sessions)if(v<now)sessions.delete(k);for(const[k,v]of attempts)if(v.until<now)attempts.delete(k);},60000).unref();
 
 let stopping=false;async function stop(){if(stopping)return;stopping=true;server.close(async()=>{try{if(store.close)await store.close();else store.db.close();}finally{process.exit(0);}});setTimeout(()=>process.exit(1),10000).unref();}process.on('SIGTERM',stop);process.on('SIGINT',stop);
