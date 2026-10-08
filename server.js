@@ -1,7 +1,7 @@
 import http from 'node:http';
 import {readFile,mkdir} from 'node:fs/promises';
 import {randomBytes,scryptSync,timingSafeEqual} from 'node:crypto';
-import {createStore} from './store.js';
+import {createStore,isbn} from './store.js';
 import {searchCatalog,localCatalog,parseCatalogCSV,providerStatus} from './catalog.js';
 let catalog,store;
 if(process.env.DATABASE_URL){
@@ -33,8 +33,14 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/api/anomalies'&&req.method==='GET')return json(res,200,await store.anomalies());
  if(url.pathname==='/api/scan'&&req.method==='POST'){const result=await store.scan((await body(req)).isbn);return json(res,200,{result});}
  if(url.pathname==='/api/catalog'&&req.method==='GET')return json(res,200,{count:await catalog.count(),providers:providerStatus()});
+ if(url.pathname==='/api/catalog/books'&&req.method==='GET'){
+  const q=(url.searchParams.get('q')||'').trim();if(q.length>200)return json(res,400,{error:'Richiesta di ricerca troppo lunga'});
+  let code;try{code=isbn(q);}catch{}
+  return json(res,200,{books:await catalog.search(q,code),count:await catalog.count()});
+ }
+ if(url.pathname==='/api/catalog/books'&&req.method==='POST')return json(res,201,{book:await catalog.add(await body(req)),count:await catalog.count()});
  if(url.pathname==='/api/catalog/import'&&req.method==='POST'){const data=await body(req);try{return json(res,200,{imported:await catalog.import(parseCatalogCSV(data.csv)),count:await catalog.count()});}catch(e){return json(res,400,{error:e.message});}}
- if(url.pathname==='/api/books'&&req.method==='GET'){const q=(url.searchParams.get('q')||'').trim();if(q.length<3||q.length>200)return json(res,400,{error:'Inserisci almeno 3 caratteri'});try{return json(res,200,await searchCatalog(q,catalog));}catch(e){return json(res,502,{error:e.message,warnings:e.warnings||[]});}}
+ if(url.pathname==='/api/books'&&req.method==='GET'){const q=(url.searchParams.get('q')||'').trim();if(q.length<3||q.length>200)return json(res,400,{error:'Inserisci almeno 3 caratteri'});if(url.searchParams.get('scope')==='catalog'){let code;try{code=isbn(q);}catch{}const books=await catalog.search(q,code);return json(res,200,{books,warnings:books.length?[]:['Nessun libro nel catalogo scolastico: aggiungi titolo e ISBN in Catalogo oppure importa il CSV.']});}try{return json(res,200,await searchCatalog(q,catalog));}catch(e){return json(res,502,{error:e.message,warnings:e.warnings||[]});}}
  return json(res,404,{error:'Operazione non trovata'});
  }catch(e){if(e instanceof SyntaxError)return json(res,400,{error:'Richiesta non valida'});if(/ISBN|Inserisci|Aggiungi|Titolo|Richiesta|Ordine/.test(e.message))return json(res,400,{error:e.message});console.error(e);return json(res,500,{error:'Errore interno. Riprova.'});}});
 server.listen(Number(process.env.PORT||3000),'0.0.0.0',()=>console.log('dioramaBooks in ascolto sulla porta '+(process.env.PORT||3000)));

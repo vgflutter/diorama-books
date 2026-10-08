@@ -77,6 +77,12 @@ export function parseCatalogCSV(text) {
  for(let i=0;i<input.length;i++){const c=input[i];if(c==='"'){if(quoted&&input[i+1]==='"'){cell+='"';i++;}else quoted=!quoted;}else if(c===separator&&!quoted){row.push(cell.trim());cell='';}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&input[i+1]==='\n')i++;row.push(cell.trim());if(row.some(Boolean))rows.push(row);row=[];cell='';}else cell+=c;}
  if(quoted)throw Error('CSV non valido: virgolette non chiuse');row.push(cell.trim());if(row.some(Boolean))rows.push(row);const headers=(rows.shift()||[]).map(h=>h.toLowerCase());const index=(...names)=>headers.findIndex(h=>names.includes(h));const ix={isbn:index('isbn','isbn13','ean'),title:index('titolo','title'),author:index('autore','autori','author'),publisher:index('editore','publisher'),year:index('anno','year'),volume:index('volume')};if(ix.isbn<0||ix.title<0)throw Error('Il CSV richiede le colonne isbn e titolo');if(!rows.length||rows.length>20000)throw Error('Il CSV deve contenere da 1 a 20000 libri');return rows.map((r,i)=>{let code;try{code=isbn(r[ix.isbn]);}catch{throw Error('ISBN non valido alla riga '+(i+2));}const title=r[ix.title];if(!title||title.length>500)throw Error('Titolo non valido alla riga '+(i+2));const read=k=>ix[k]<0?'':String(r[ix[k]]||'').slice(0,300);return {isbn:code,title,author:read('author'),publisher:read('publisher'),year:read('year'),volume:read('volume')};});
 }
+export function validateCatalogBook(input) {
+ const title=String(input?.title??'').trim();
+ if(!title||title.length>500)throw Error('Titolo non valido: inserisci il titolo del libro');
+ const field=(name,max)=>String(input?.[name]??'').trim().slice(0,max);
+ return {title,isbn:isbn(input?.isbn),author:field('author',300),publisher:field('publisher',300),year:field('year',100),volume:field('volume',100),origin:'Manuale',languages:'ita',source:'Catalogo libreria'};
+}
 export function localCatalog(db) {
  db.exec("CREATE TABLE IF NOT EXISTS catalog(isbn TEXT PRIMARY KEY,title TEXT NOT NULL,author TEXT,publisher TEXT,year TEXT,volume TEXT,origin TEXT NOT NULL DEFAULT 'CSV',languages TEXT NOT NULL DEFAULT 'ita')");
  const columns=new Set(db.prepare('PRAGMA table_info(catalog)').all().map(c=>c.name));
@@ -86,6 +92,12 @@ export function localCatalog(db) {
  const remember=db.prepare('INSERT INTO catalog(isbn,title,author,publisher,year,volume,origin,languages) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(isbn) DO NOTHING');
  return {
   count(){return db.prepare('SELECT COUNT(*) AS n FROM catalog').get().n;},
+  add(input){
+   const book=validateCatalogBook(input);
+   const result=remember.run(book.isbn,book.title,book.author,book.publisher,book.year,book.volume,book.origin,book.languages);
+   if(!result.changes)throw Error('ISBN già presente nel catalogo');
+   return book;
+  },
   search(q,code){
    let rows;
    if(code)rows=db.prepare('SELECT * FROM catalog WHERE isbn=?').all(code);

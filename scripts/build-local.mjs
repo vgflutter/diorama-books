@@ -1,7 +1,7 @@
 import {readFile,writeFile} from 'node:fs/promises';
 const root=new URL('../',import.meta.url);const read=p=>readFile(new URL(p,root),'utf8');
 const [html,css,app,adapter,core,catalog]=await Promise.all(['public/index.html','public/style.css','public/app.js','offline/browser-adapter.js','offline/archive.js','catalog.js'].map(read));
-const parser=catalog.slice(catalog.indexOf('export function parseCatalogCSV'),catalog.indexOf('export function localCatalog')).replace('export function','function').replaceAll('isbn(','normalize(');
+const parser=catalog.slice(catalog.indexOf('export function parseCatalogCSV'),catalog.indexOf('export function localCatalog')).replaceAll('export function','function').replaceAll('isbn(','normalize(');
 const request=catalog.slice(catalog.indexOf('async function requestJSON'),catalog.indexOf('async function googleBooks'));
 const library=catalog.slice(catalog.indexOf('async function openLibrary'),catalog.indexOf('export async function searchCatalog'));
 const start=app.indexOf('async function api('),end=app.indexOf('function showLogin',start);if(start<0||end<0)throw Error('API adapter non trovato');

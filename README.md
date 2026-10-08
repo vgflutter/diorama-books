@@ -31,7 +31,7 @@ L’avvio abilita il proxy di rete supportato da Node.js (`--use-env-proxy`). Po
 
 ## Flusso
 
-1. Nuovo ordine: nome, cognome, ricerca per titolo/autore/ISBN, selezione dell'edizione e quantità. In alternativa inserire titolo e ISBN manualmente. La ricerca combina il catalogo della libreria, Google Books e le edizioni italiane di Open Library; un ISBN cerca esattamente la sua edizione; editore, data, lingua e ISBN aiutano a riconoscere l'edizione. Il catalogo non garantisce copertura completa: verificare sempre il codice dell'edizione richiesta.
+1. Nuovo ordine: nome, cognome, ricerca per titolo/autore/ISBN, selezione dell'edizione e quantità. In alternativa inserire titolo e ISBN manualmente. La ricerca usa il catalogo della libreria; con Cerca anche online consulta anche Google Books e le edizioni italiane di Open Library; un ISBN cerca esattamente la sua edizione; editore, data, lingua e ISBN aiutano a riconoscere l'edizione. Il catalogo non garantisce copertura completa: verificare sempre il codice dell'edizione richiesta.
 2. Il server salva la data UTC automaticamente e mostra la data nell'ora locale del browser. Gli ordini iniziano pendenti.
 3. Ricevi libri: mantenere il campo ISBN attivo e scansionare con un lettore che invia il codice seguito da Invio. Si può anche digitare il codice. Ogni scansione equivale a una copia.
 4. Assegnazione al più vecchio ordine ancora pendente per lo stesso ISBN. A parità di data vale l'ID dell'ordine. Lo stato resta **pendente** finché mancano copie o titoli, con il progresso delle quantità visibile. La scansione dell’ultima copia rende l’ordine **evaso**. Il pulsante **Archivia**, disponibile solo per gli evasi, lo rende **archiviato** e conserva la data di archiviazione.
@@ -45,6 +45,14 @@ Per un utilizzo pubblico, configurare `DIORAMA_USER` e `DIORAMA_PASSWORD` con cr
 
 È necessario accesso HTTPS a `openlibrary.org` e `www.googleapis.com` per le ricerche esterne; l'inserimento manuale funziona anche senza catalogo. I test automatici verificano database, persistenza, ISBN, FIFO, quantità, login e API. Non verificano l'hardware del lettore né la disponibilità del catalogo esterno. La pistola reale va provata con due copie dello stesso ISBN e un ordine con più titoli.
 
+
+## Catalogo manuale
+
+La sezione **Catalogo** permette di salvare uno scolastico con titolo e ISBN senza creare un ordine. Autore, editore, anno/edizione e volume sono facoltativi. ISBN-10 viene normalizzato a ISBN-13; un ISBN già presente viene segnalato, mantenendo la scheda esistente. I libri sono salvati nel backend scelto o nell’archivio JSON locale e diventano disponibili nei nuovi ordini. Anche l’importazione CSV è disponibile direttamente in Catalogo.
+
+La ricerca dei nuovi ordini usa inizialmente **solo il catalogo della libreria**. Selezionare **Cerca anche online** per consultare le fonti esterne: i risultati devono essere verificati come scolastici italiani e come edizioni effettivamente richieste. La lingua italiana e il prefisso ISBN non identificano da soli un testo scolastico.
+
+`GET /api/catalog/books?q=...` cerca nell’archivio locale (fino a 40 risultati); `POST /api/catalog/books` salva un libro manuale. Gli endpoint richiedono login e non generano ordini.
 
 ## Catalogo scolastico italiano
 

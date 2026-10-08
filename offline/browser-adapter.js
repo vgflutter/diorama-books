@@ -18,10 +18,22 @@ async function api(path,method='GET',data){
  if(path==='session')return {ok:true};
  if(path==='logout'){archiveAuthenticated=false;try{sessionStorage.removeItem(archiveStorageKey+'.session');}catch{}return {ok:true};}
  if(path==='catalog')return {count:archiveState.catalog.length};
+ if(path.startsWith('catalog/books')&&method==='GET'){
+  const q=new URLSearchParams(path.split('?')[1]||'').get('q')?.trim()||'';
+  if(q.length>200)throw Error('Richiesta di ricerca troppo lunga');
+  return {books:archiveSearch(archiveState,q,normalize),count:archiveState.catalog.length};
+ }
+ if(path==='catalog/books'&&method==='POST')return mutateArchive(async()=>{
+  const book=validateCatalogBook(data);
+  if(archiveState.catalog.some(b=>b.isbn===book.isbn))throw Error('ISBN già presente nel catalogo');
+  const next=structuredClone(archiveState);next.catalog.push(book);await commitArchive(next);
+  return {book,count:next.catalog.length};
+ });
  if(path==='catalog/import')return mutateArchive(async()=>{const books=parseCatalogCSV(data.csv);const next=archiveImport(archiveState,books);await commitArchive(next);return {imported:books.length,count:next.catalog.length};});
  if(path.startsWith('books?')){
   const q=new URLSearchParams(path.slice(path.indexOf('?')+1)).get('q')?.trim()||'';if(q.length<3||q.length>200)throw Error('Inserisci almeno 3 caratteri');
   const local=archiveSearch(archiveState,q,normalize);if(local.length)return {books:local,warnings:[]};
+  if(new URLSearchParams(path.slice(path.indexOf('?')+1)).get('scope')==='catalog')return {books:[],warnings:['Nessun libro nel catalogo scolastico: aggiungi titolo e ISBN in Catalogo oppure importa il CSV.']};
   let code;try{code=normalize(q);}catch{}
   try{const remote=await openLibrary(q,code,fetch);const seen=new Set(),books=[];for(const b of remote){let normalized;try{normalized=normalize(String(b.isbn));}catch{continue;}if(code&&code!==normalized||seen.has(normalized))continue;seen.add(normalized);books.push({...b,isbn:normalized});}return {books,warnings:['Risultati da Open Library: verifica edizione e ISBN.']};}
   catch{return {books:[],warnings:['Catalogo online non disponibile. Importa il CSV o inserisci il libro manualmente.']};}

@@ -30,6 +30,17 @@ async function api(path,method='GET',data){
  if(path==='session')return {ok:true};
  if(path==='logout'){demoAuthenticated=false;try{sessionStorage.removeItem(demoStorageKey+'.session');}catch{}return {ok:true};}
  if(path==='catalog')return {count:demoState.catalog.length};
+ if(path.startsWith('catalog/books')&&method==='GET'){
+  const q=new URLSearchParams(path.split('?')[1]||'').get('q')?.trim()||'';
+  if(q.length>200)throw Error('Richiesta di ricerca troppo lunga');
+  return {books:archiveSearch(demoState,q,normalize),count:demoState.catalog.length};
+ }
+ if(path==='catalog/books'&&method==='POST'){
+  const book=validateCatalogBook(data);
+  if(demoState.catalog.some(b=>b.isbn===book.isbn))throw Error('ISBN già presente nel catalogo');
+  const next=structuredClone(demoState);next.catalog.push(book);saveDemo(next);
+  return {book,count:next.catalog.length};
+ }
  if(path==='catalog/import'){
   const books=parseCatalogCSV(data.csv);const next=structuredClone(demoState);
   for(const book of books){const existing=next.catalog.findIndex(b=>b.isbn===book.isbn);const value={...book,languages:'ita',origin:'CSV',source:'Catalogo libreria'};if(existing<0)next.catalog.push(value);else next.catalog[existing]=value;}

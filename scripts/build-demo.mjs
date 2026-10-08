@@ -3,7 +3,7 @@ import {parseCatalogCSV} from '../catalog.js';
 const root=new URL('../',import.meta.url);
 const read=path=>readFile(new URL(path,root),'utf8');
 const [html,css,app,adapter,catalog,sample,core]=await Promise.all(['public/index.html','public/style.css','public/app.js','demo/browser-adapter.js','catalog.js','demo/catalogo-esempio.csv','offline/archive.js'].map(read));
-const parser=catalog.slice(catalog.indexOf('export function parseCatalogCSV'),catalog.indexOf('export function localCatalog')).replace('export function','function').replaceAll('isbn(','normalize(');
+const parser=catalog.slice(catalog.indexOf('export function parseCatalogCSV'),catalog.indexOf('export function localCatalog')).replaceAll('export function','function').replaceAll('isbn(','normalize(');
 const books=parseCatalogCSV(sample).map(b=>({...b,source:'Catalogo libreria',origin:'Esempio dimostrativo',languages:'ita'}));
 const start=app.indexOf('async function api('),end=app.indexOf('function showLogin',start);
 if(start<0||end<0)throw Error('API adapter non trovato');

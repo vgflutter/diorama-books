@@ -15,12 +15,16 @@ conservare e trasferire i dati devi salvare il file JSON e farne copie.
 Non modificare lo stesso archivio da più schede/browser contemporaneamente.
 
 CATALOGO
-Nuovo ordine → Importa il catalogo scolastico del fornitore.
+Catalogo → Aggiungi un libro: inserisci titolo e ISBN e premi Salva nel catalogo.
+Non serve creare un ordine. Autore, editore, anno e volume sono facoltativi.
+L’ISBN viene controllato; i duplicati non sovrascrivono i dati esistenti.
+Catalogo → Importa il catalogo scolastico del fornitore.
 CSV UTF-8 con colonne isbn e titolo; facoltative: autore, editore, anno, volume.
 Puoi usare il modello CSV vuoto oppure il piccolo catalogo di esempio.
 Gli esempi sono edizioni 2005/2008, non adozioni scolastiche aggiornate.
-Se il libro manca, si prova Open Library (serve Internet), oppure si può
-inserire manualmente titolo e ISBN. La chiave Google Books resta nella
+Nei nuovi ordini la ricerca parte dal catalogo della libreria. Selezionando
+Cerca anche online si consulta Open Library (serve Internet). Controlla che
+il risultato sia lo scolastico italiano e la stessa edizione richiesti. La chiave Google Books resta nella
 versione server e non è inclusa nell'HTML.
 
 RICEZIONE

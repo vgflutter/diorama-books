@@ -1,5 +1,6 @@
 import pg from 'pg';
 import {isbn,validateOrder} from './store.js';
+import {validateCatalogBook} from './catalog.js';
 const iso=value=>value instanceof Date?value.toISOString():value;
 const row=item=>({...item,id:Number(item.id),...(item.order_id?{order_id:Number(item.order_id)}:{}),...(item.created_at?{created_at:iso(item.created_at)}:{}),...(item.archived_at?{archived_at:iso(item.archived_at)}:{})});
 export async function createPostgresStore(connectionString,{onOrderItems}={}){
@@ -43,6 +44,12 @@ export function postgresCatalog(pool){
  const put=async(book,connection,overwrite)=>{const values=[book.isbn,book.title,book.author||'',book.publisher||'',book.year||'',book.volume||'',book.origin||book.source||'Ordine',book.languages||''];await connection.query('INSERT INTO catalog(isbn,title,author,publisher,year,volume,origin,languages) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(isbn) '+(overwrite?'DO UPDATE SET title=excluded.title,author=excluded.author,publisher=excluded.publisher,year=excluded.year,volume=excluded.volume,origin=excluded.origin,languages=excluded.languages':'DO NOTHING'),values);};
  return {
   async count(){return Number((await pool.query('SELECT COUNT(*) AS n FROM catalog')).rows[0].n);},
+  async add(input){
+   const book=validateCatalogBook(input);
+   const result=await pool.query('INSERT INTO catalog(isbn,title,author,publisher,year,volume,origin,languages) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(isbn) DO NOTHING',[book.isbn,book.title,book.author,book.publisher,book.year,book.volume,book.origin,book.languages]);
+   if(!result.rowCount)throw Error('ISBN già presente nel catalogo');
+   return book;
+  },
   async search(q,code){let result;if(code)result=await pool.query('SELECT * FROM catalog WHERE isbn=$1',[code]);else{const words=q.toLowerCase().trim().split(/\s+/).slice(0,12);const expression="lower(title||' '||coalesce(author,'')||' '||coalesce(publisher,'')||' '||coalesce(year,'')||' '||coalesce(volume,''))";result=await pool.query('SELECT * FROM catalog WHERE '+words.map((_,i)=>expression+' LIKE $'+(i+1)+" ESCAPE '\\'").join(' AND ')+' ORDER BY title LIMIT 40',words.map(w=>'%'+w.replace(/[\\%_]/g,c=>'\\'+c)+'%'));}return result.rows.map(b=>({...b,source:'Catalogo libreria'}));},
   async remember(books,connection=pool){for(const b of books)await put(b,connection,false);},
   async import(books){const client=await pool.connect();try{await client.query('BEGIN');for(const b of books)await put({...b,origin:'CSV',languages:'ita'},client,true);await client.query('COMMIT');return books.length;}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}}
