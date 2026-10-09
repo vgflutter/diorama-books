@@ -12,32 +12,93 @@
 .catalog-add-card{background:white;border:1px solid var(--line);border-radius:12px;padding:24px;margin:25px 0}.catalog-add-card h2{font-size:24px}.catalog-add-card details{margin-bottom:18px}#catalog-list{overflow:auto}#catalog-search-form{align-items:center}#catalog-search-form input{width:260px}@media(max-width:700px){.catalog-add-card{padding:18px}.catalog-add-card .two-col{grid-template-columns:1fr}#catalog-search-form input{width:auto}}
 
 .online-choice{display:flex;align-items:flex-start;gap:9px;font-size:12px;font-weight:400;line-height:1.6;margin:12px 0}.online-choice input{width:auto;flex-shrink:0;margin:4px 0 0}
-.archive-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#e4ecd7;padding:14px 24px;border-bottom:1px solid #ccd8ba;font-size:12px}.archive-bar small{display:block;margin-top:5px;max-width:600px;color:#6c7b60}.archive-actions{display:flex;gap:8px}.archive-actions button{padding:9px 12px;font-size:11px}.archive-bar~#app aside{position:sticky;top:0;flex-shrink:0}.archive-bar~#app main{margin-left:0}.login-art{min-height:calc(100vh - 78px)}@media(max-width:700px){.archive-bar{flex-wrap:wrap;padding:12px 18px}.archive-bar~#app aside{position:relative;top:auto}.archive-actions{flex-wrap:wrap}}</style></head><body><script>window.addEventListener('error',function(e){var n=document.getElementById('login-error');if(n){n.textContent='Errore di avvio: '+e.message;document.getElementById('login').classList.remove('hidden');document.getElementById('app').classList.add('hidden');}});if(!window.structuredClone)window.structuredClone=function(v){return JSON.parse(JSON.stringify(v));};</script><div class="archive-bar"><div><strong>dioramaBooks locale</strong><small id="archive-notice">Apri o salva un archivio JSON per conservare i dati.</small></div><div class="archive-actions"><button id="archive-open" class="secondary">Apri archivio</button><button id="archive-save" class="secondary">Salva su file</button><button id="archive-download" class="secondary">Scarica JSON</button></div><input id="archive-input" type="file" accept=".json,application/json" class="hidden" aria-label="Archivio JSON"></div>
+
+select{width:100%;border:1px solid #dcded5;border-radius:8px;background:#fff;padding:12px;color:inherit;font:inherit}.customer-link{border:0;background:none;color:#293f35;font:inherit;font-weight:600;padding:0;text-align:left;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.table-scroll,#customer-list{overflow-x:auto}.amount-cell{min-width:180px}.customer-search{align-items:end;gap:16px}.customer-search label{flex:1;margin:0}.customer-search button{margin-bottom:0}#customer-detail{margin-top:24px}#customer-detail h2{margin:0}.order-finances{display:flex;gap:24px;justify-content:space-between;align-items:start;padding:18px;background:#f1f3e9;border-radius:10px;margin:16px 0}.order-finances label{margin:0;max-width:220px}.money-summary{display:grid;gap:10px;flex:1}.money-summary span{display:flex;justify-content:space-between;gap:20px}.cart-item{display:grid;grid-template-columns:minmax(150px,1fr) 75px 150px 90px 30px;align-items:center;gap:12px}.cart-item label{font-size:11px;margin:0}.cart-item input{width:100%;padding:10px}.cart-item button{padding:5px}.cart-line-total{text-align:right;font-weight:600}@media(max-width:800px){.cart-item{grid-template-columns:75px 1fr 80px 30px}.cart-book{grid-column:1/-1}.order-finances{flex-direction:column}.money-summary{width:100%}.customer-search{flex-wrap:wrap}.customer-search label{min-width:130px}}
+.archive-bar{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#e4ecd7;padding:14px 24px;border-bottom:1px solid #ccd8ba;font-size:12px}.archive-bar small{display:block;margin-top:5px;max-width:600px;color:#6c7b60}.archive-actions{display:flex;gap:8px;flex-wrap:wrap}.archive-actions button{padding:9px 12px;font-size:11px}.archive-bar~#app aside{position:sticky;top:0;flex-shrink:0}.archive-bar~#app main{margin-left:0}.login-art{min-height:calc(100vh - 78px)}@media(max-width:700px){.archive-bar{flex-wrap:wrap;padding:12px 18px}.archive-bar~#app aside{position:relative;top:auto}.archive-actions{flex-wrap:wrap}}</style></head><body><script>window.addEventListener('error',function(e){var n=document.getElementById('login-error');if(n){n.textContent='Errore di avvio: '+e.message;document.getElementById('login').classList.remove('hidden');document.getElementById('app').classList.add('hidden');}});if(!window.structuredClone)window.structuredClone=function(v){return JSON.parse(JSON.stringify(v));};</script><div class="archive-bar"><div><strong>dioramaBooks locale</strong><small id="archive-notice">Apri o salva un archivio JSON per conservare i dati.</small></div><div class="archive-actions"><button id="archive-folder" class="secondary">Cartella dati</button><button id="archive-open" class="secondary">Apri archivio</button><button id="archive-save" class="secondary">Salva su file</button><button id="archive-download" class="secondary">Scarica JSON</button><button id="archive-recovery" class="secondary">Copia di recupero</button></div><input id="archive-input" type="file" accept=".json,application/json" class="hidden" aria-label="Archivio JSON"></div>
 <section id="login" class="login"><div class="login-art"><span class="brand">dioramaBooks<span>↗︎</span></span><div><p class="eyebrow">LA TUA LIBRERIA, IN ORDINE</p><h1>Ogni libro trova<br>la sua persona.</h1><p>Dalle richieste dei lettori all’arrivo in libreria.<br>Un posto per tenere insieme tutto.</p></div><span>LIBRI · PERSONE · INCONTRI</span></div><form id="login-form" class="login-form" novalidate><p class="eyebrow">BENVENUTO IN LIBRERIA</p><h2>Entriamo?</h2><p>Accesso locale: <strong>diorama / diorama</strong>. Scarica il file e aprilo nel browser; l’anteprima della chat può bloccare JavaScript.</p><label>Nome utente<input name="username" value="diorama" autocomplete="username" required></label><label>Password<input name="password" value="diorama" type="password" autocomplete="current-password" required></label><p id="login-error" class="error" role="alert">Per usare l’app apri questo file nel browser con JavaScript attivo.</p><button class="primary" disabled>Accedi <span>→</span></button></form></section>
-<div id="app" class="hidden"><aside><a href="#" class="brand">dioramaBooks<span>↗︎</span></a><p class="nav-caption">LA LIBRERIA</p><button class="nav active" data-view="orders">☷ <span>Ordini clienti</span></button><button class="nav" data-view="catalog">▤ <span>Catalogo</span></button><button class="nav" data-view="receive">▥ <span>Ricevi libri</span></button><button class="nav" data-view="anomalies">⚠ <span>Anomalie</span><span class="nav-count" id="anomaly-count">0</span></button><div class="aside-bottom"><div class="avatar">D</div><div>Diorama<small>Gestione libreria</small></div><button id="logout" aria-label="Esci">↗︎</button></div></aside><main><header><span>DIORAMABOOKS · LIBRERIA DIORAMA</span><div class="header-actions"><span id="today"></span><button id="mobile-logout" class="icon-button" aria-label="Esci">↗︎</button></div></header>
+<div id="app" class="hidden"><aside><a href="#" class="brand">dioramaBooks<span>↗︎</span></a><p class="nav-caption">LA LIBRERIA</p><button class="nav active" data-view="orders">☷ <span>Ordini clienti</span></button><button class="nav" data-view="customers">♙ <span>Clienti</span></button><button class="nav" data-view="catalog">▤ <span>Catalogo</span></button><button class="nav" data-view="receive">▥ <span>Ricevi libri</span></button><button class="nav" data-view="anomalies">⚠ <span>Anomalie</span><span class="nav-count" id="anomaly-count">0</span></button><div class="aside-bottom"><div class="avatar">D</div><div>Diorama<small>Gestione libreria</small></div><button id="logout" aria-label="Esci">↗︎</button></div></aside><main><header><span>DIORAMABOOKS · LIBRERIA DIORAMA</span><div class="header-actions"><span id="today"></span><button id="mobile-logout" class="icon-button" aria-label="Esci">↗︎</button></div></header>
 <section id="orders-view"><div class="page-heading"><div><p class="eyebrow">UNA STORIA ALLA VOLTA</p><h1>Ordini clienti<span class="dot">.</span></h1><p>Tutte le richieste dei tuoi lettori, dal primo all’ultimo libro.</p></div><button id="new-order" class="primary">＋ Nuovo ordine</button></div><div class="stats"><article><span>Ordini pendenti</span><strong id="pending-count">0</strong><small>In attesa dei libri</small></article><article><span>Ordini evasi</span><strong id="done-count">0</strong><small>Libri abbinati, da archiviare</small></article><article><span>Ordini archiviati</span><strong id="archived-count">0</strong><small>Abbinati e archiviati</small></article></div><section class="list-card"><div class="list-toolbar"><div class="tabs"><button class="selected" data-filter="pendente">Pendenti</button><button data-filter="evaso">Evasi</button><button data-filter="archiviato">Archiviati</button></div><input id="order-search" aria-label="Cerca ordini" placeholder="Cerca cliente, titolo o ISBN…"></div><div id="order-list"></div><footer id="list-footer"></footer></section><p class="hint">↳ Ogni copia ricevuta viene assegnata alla richiesta più vecchia per lo stesso ISBN.</p></section>
+<section id="customers-view" class="hidden"><p class="eyebrow">I LETTORI DELLA LIBRERIA</p><h1>Clienti<span class="dot">.</span></h1><p>Cerca per nome, cognome o entrambi. Apri un cliente per vedere tutti i suoi ordini.</p><section class="list-card"><form id="customer-search-form" class="list-toolbar customer-search"><label>Nome<input id="customer-first-search" placeholder="Cerca nome" maxlength="100"></label><label>Cognome<input id="customer-last-search" placeholder="Cerca cognome" maxlength="100"></label><button class="secondary">Cerca</button></form><div id="customer-list"></div><footer id="customer-footer"></footer></section><section id="customer-detail" class="list-card hidden"><div class="list-toolbar"><div><h2 id="customer-detail-name"></h2><span id="customer-detail-summary" class="sub"></span></div><button id="customer-new-order" class="primary">＋ Nuovo ordine</button></div><div id="customer-orders"></div></section></section>
 <section id="receive-view" class="hidden"><p class="eyebrow">DALLA SCATOLA AL LETTORE</p><h1>Ricevi libri<span class="dot">.</span></h1><p>Scansiona il codice sul libro. Troviamo noi il primo cliente in attesa.</p><div class="scanner-card"><div class="scan-icon">▥</div><h2>Pronto per la prossima storia</h2><p>Una scansione registra una copia ricevuta.</p><form id="scan-form"><label for="scan-isbn">ISBN del libro</label><div class="inline"><input id="scan-isbn" placeholder="Scansiona o inserisci l’ISBN" autocomplete="off" required><button class="primary">Ricevi copia →</button></div></form><div id="scan-result" role="status" aria-live="polite"></div></div><h2 class="section-title">Ricevuti in questa sessione</h2><div id="scan-history" class="history"><p>Le prossime scansioni compariranno qui.</p></div></section>
 <section id="catalog-view" class="hidden"><p class="eyebrow">SCOLASTICI DELLA LIBRERIA</p><h1>Catalogo<span class="dot">.</span></h1><p>Aggiungi gli scolastici italiani trattati dalla libreria. Titolo e ISBN identificano il libro; volume ed edizione aiutano a scegliere quello richiesto.</p><section class="catalog-add-card"><h2>Aggiungi un libro</h2><form id="catalog-add-form"><div class="two-col"><label>Titolo<input name="title" id="catalog-add-title" required maxlength="500" placeholder="Titolo del libro scolastico"></label><label>ISBN<input name="isbn" id="catalog-add-isbn" required autocomplete="off" placeholder="ISBN-10 o ISBN-13"></label></div><details><summary>Autore, editore e volume (facoltativi)</summary><div class="two-col"><label>Autore<input name="author" maxlength="300"></label><label>Editore<input name="publisher" maxlength="300"></label></div><div class="two-col"><label>Anno / edizione<input name="year" maxlength="100"></label><label>Volume<input name="volume" maxlength="100"></label></div></details><p id="catalog-add-error" class="error" role="alert"></p><button id="catalog-add-save" class="primary">Salva nel catalogo</button><p class="field-note">Il libro sarà disponibile nei nuovi ordini. Ogni ISBN viene salvato una sola volta.</p></form><details><summary>Importa il catalogo scolastico del fornitore</summary><p class="field-note">File CSV con colonne isbn e titolo. Facoltative: autore, editore, anno, volume. Il catalogo della libreria ha priorità nelle ricerche. <a href="data:text/csv;charset=utf-8,isbn%3Btitolo%3Bautore%3Beditore%3Banno%3Bvolume%0A" download>Scarica il modello CSV</a>.</p><input type="file" id="catalog-page-file" accept=".csv,text/csv" aria-label="File CSV del catalogo"><button type="button" id="catalog-page-import" class="secondary">Importa catalogo</button><p id="catalog-page-status" class="field-note" role="status"></p></details></section><section class="list-card"><div class="list-toolbar"><strong id="catalog-count-label">Libri nel catalogo</strong><form id="catalog-search-form" class="inline"><input id="catalog-search" maxlength="200" aria-label="Cerca nel catalogo" placeholder="Titolo, autore o ISBN…"><button class="secondary">Cerca</button></form></div><div id="catalog-list"></div><footer id="catalog-list-footer"></footer></section></section>
 <section id="anomalies-view" class="hidden"><p class="eyebrow">SCANSIONI DA VERIFICARE</p><h1>Libri senza ordine<span class="dot">.</span></h1><p>Ogni riga è una copia scansionata senza una richiesta pendente per lo stesso ISBN. Il registro conserva ISBN, data e ora.</p><section class="list-card"><div id="anomaly-list"></div><footer id="anomaly-footer"></footer></section></section></main></div>
-<dialog id="order-dialog"><form id="order-form"><div class="dialog-header"><div><p class="eyebrow">IL PROSSIMO LIBRO DA ASPETTARE</p><h2>Nuovo ordine</h2></div><button type="button" id="close-dialog" class="icon-button" aria-label="Chiudi">×</button></div><div class="two-col"><label>Nome<input id="first-name" required maxlength="100" autocomplete="given-name"></label><label>Cognome<input id="last-name" required maxlength="100" autocomplete="family-name"></label></div><label>Cerca nel catalogo scolastico per titolo o ISBN</label><div class="inline"><input id="book-query" placeholder="Titolo scolastico, autore o ISBN"><button type="button" id="find-book" class="secondary">Cerca</button></div><label class="online-choice"><input type="checkbox" id="book-online"> Cerca anche online: verifica che sia lo scolastico italiano e l’edizione richiesti.</label><details><summary>Importa il catalogo scolastico del fornitore</summary><p class="field-note">File CSV con colonne isbn e titolo. Facoltative: autore, editore, anno, volume. Il catalogo della libreria ha priorità nelle ricerche. <a href="/catalog-template.csv" download>Scarica il modello CSV</a>.</p><input type="file" id="catalog-file" accept=".csv,text/csv" aria-label="File CSV del catalogo"><button type="button" id="catalog-import" class="secondary">Importa catalogo</button><p id="catalog-status" class="field-note" role="status"></p></details><p class="field-note">Per gli scolastici verifica anche volume e anno. Verifica l’ISBN dell’edizione richiesta: lo stesso titolo può avere più codici.</p><div id="book-results" aria-live="polite"></div><details><summary>Inserisci un libro manualmente</summary><div class="manual"><label>Titolo<input id="manual-title" maxlength="500"></label><div class="two-col"><label>Autore (facoltativo)<input id="manual-author"></label><label>ISBN<input id="manual-isbn"></label></div><div class="two-col"><label>Editore (facoltativo)<input id="manual-publisher" maxlength="300"></label><label>Anno / edizione (facoltativo)<input id="manual-year" maxlength="100"></label></div><label>Volume (facoltativo)<input id="manual-volume" maxlength="100"></label><button type="button" id="manual-add" class="secondary">＋ Aggiungi libro</button></div></details><h3>Libri richiesti</h3><div id="cart"></div><p id="order-error" class="error" role="alert"></p><div class="dialog-footer"><span>Data e ora vengono salvate automaticamente.</span><button id="save-order" class="primary">Salva ordine →</button></div></form></dialog><div id="toast" class="toast hidden" role="status"></div>
-<script>function emptyArchive(){return {format:'diorama-books',version:1,catalog:[],orders:[],receipts:[],anomalies:[],nextOrder:1,nextItem:1,nextAnomaly:1};}
+<dialog id="order-dialog"><form id="order-form"><div class="dialog-header"><div><p class="eyebrow">IL PROSSIMO LIBRO DA ASPETTARE</p><h2>Nuovo ordine</h2></div><button type="button" id="close-dialog" class="icon-button" aria-label="Chiudi">×</button></div><label>Cliente<select id="order-customer"><option value="">＋ Crea un nuovo cliente</option></select></label><p class="field-note">Se il cliente è già registrato, selezionalo dall’elenco. Gli omonimi hanno un numero cliente diverso.</p><div class="two-col"><label>Nome<input id="first-name" required maxlength="100" autocomplete="given-name"></label><label>Cognome<input id="last-name" required maxlength="100" autocomplete="family-name"></label></div><label>Cerca nel catalogo scolastico per titolo o ISBN</label><div class="inline"><input id="book-query" placeholder="Titolo scolastico, autore o ISBN"><button type="button" id="find-book" class="secondary">Cerca</button></div><label class="online-choice"><input type="checkbox" id="book-online"> Cerca anche online: verifica che sia lo scolastico italiano e l’edizione richiesti.</label><details><summary>Importa il catalogo scolastico del fornitore</summary><p class="field-note">File CSV con colonne isbn e titolo. Facoltative: autore, editore, anno, volume. Il catalogo della libreria ha priorità nelle ricerche. <a href="/catalog-template.csv" download>Scarica il modello CSV</a>.</p><input type="file" id="catalog-file" accept=".csv,text/csv" aria-label="File CSV del catalogo"><button type="button" id="catalog-import" class="secondary">Importa catalogo</button><p id="catalog-status" class="field-note" role="status"></p></details><p class="field-note">Per gli scolastici verifica anche volume e anno. Verifica l’ISBN dell’edizione richiesta: lo stesso titolo può avere più codici.</p><div id="book-results" aria-live="polite"></div><details><summary>Inserisci un libro manualmente</summary><div class="manual"><label>Titolo<input id="manual-title" maxlength="500"></label><div class="two-col"><label>Autore (facoltativo)<input id="manual-author"></label><label>ISBN<input id="manual-isbn"></label></div><div class="two-col"><label>Editore (facoltativo)<input id="manual-publisher" maxlength="300"></label><label>Anno / edizione (facoltativo)<input id="manual-year" maxlength="100"></label></div><label>Volume (facoltativo)<input id="manual-volume" maxlength="100"></label><button type="button" id="manual-add" class="secondary">＋ Aggiungi libro</button></div></details><h3>Libri richiesti</h3><div id="cart"></div><div class="order-finances"><label>Acconto già versato (€)<input id="order-deposit" value="0" required inputmode="decimal" placeholder="0,00" maxlength="11"></label><div class="money-summary" aria-live="polite"><span>Totale ordine <strong id="order-total">—</strong></span><span>Acconto <strong id="order-deposit-total">—</strong></span><span>Da saldare <strong id="order-balance">—</strong></span></div></div><p id="order-error" class="error" role="alert"></p><div class="dialog-footer"><span>Data e ora vengono salvate automaticamente.</span><button id="save-order" class="primary">Salva ordine →</button></div></form></dialog><div id="toast" class="toast hidden" role="status"></div>
+<script>// Copie di recupero indipendenti dall'archivio corrente, anche per dati delle versioni precedenti.
+function backupArchive(storage,key,raw){
+ if(!raw)return;
+ const backupKey=key+'.backups';
+ let entries=[];
+ try{const saved=storage.getItem(backupKey);if(saved)entries=JSON.parse(saved);if(!Array.isArray(entries))throw Error();}catch{throw Error('Le copie di recupero del browser non sono leggibili. Scarica il JSON prima di continuare.');}
+ if(entries[0]?.raw===raw)return;
+ const entry={saved_at:new Date().toISOString(),raw};
+ storage.setItem(backupKey,JSON.stringify([entry,...entries].slice(0,5)));
+}
+
+const maxCents=999999999;
+function storedCents(value,label='Importo'){
+ if(value===undefined||value===null)return null;
+ if(!Number.isSafeInteger(value)||value<0||value>maxCents)throw Error(label+' non valido');
+ return value;
+}
+function moneyCents(value,label='Importo'){
+ if(value===undefined||value===null||String(value).trim()==='')return null;
+ const raw=String(value).trim();
+ if(!/^(?:\d{1,7}(?:[.,]\d{1,2})?|[.,]\d{1,2})$/.test(raw))throw Error(label+' non valido: usa un importo positivo con al massimo due decimali');
+ const [whole,fraction='']=raw.replace(',','.').split('.');
+ return storedCents(Number(whole||0)*100+Number(fraction.padEnd(2,'0')),label);
+}
+function moneyFields(input,items){
+ const deposit_cents=input.deposit!==undefined?moneyCents(input.deposit,'Acconto'):storedCents(input.deposit_cents,'Acconto');
+ const amounts=priceSummary({items,deposit_cents});
+ if(deposit_cents>0&&amounts.total_amount_cents===null)throw Error('Inserisci il prezzo di tutti i libri prima dell’acconto');
+ if(amounts.total_amount_cents!==null&&deposit_cents>amounts.total_amount_cents)throw Error('Acconto superiore al totale dell’ordine');
+ return {deposit_cents};
+}
+function priceSummary(order){
+ const complete=order.items.every(i=>i.unit_price_cents!==undefined&&i.unit_price_cents!==null);
+ const total_amount_cents=complete?order.items.reduce((n,i)=>n+i.unit_price_cents*i.quantity,0):null;
+ if(total_amount_cents!==null&&!Number.isSafeInteger(total_amount_cents))throw Error('Importo totale non valido');
+ const deposit_cents=order.deposit_cents??null;
+ return {total_amount_cents,deposit_cents,balance_cents:total_amount_cents!==null&&deposit_cents!==null?total_amount_cents-deposit_cents:null};
+}
+function customerKey(first,last){return JSON.stringify([first,last].map(s=>String(s).trim().replace(/\s+/g,' ').toLocaleLowerCase('it')));}
+function customerSummaries(customers,orders,first='',last=''){
+ const normalized=s=>String(s).trim().toLocaleLowerCase('it');
+ return customers.filter(c=>normalized(c.first_name).includes(normalized(first))&&normalized(c.last_name).includes(normalized(last)))
+ .sort((a,b)=>a.last_name.localeCompare(b.last_name,'it')||a.first_name.localeCompare(b.first_name,'it')||a.id-b.id)
+ .map(c=>{const own=orders.filter(o=>o.customer_id===c.id);return {...c,order_count:own.length,pending_count:own.filter(o=>o.status==='pendente').length,closed_count:own.filter(o=>o.status!=='pendente').length};});
+}
+
+function emptyArchive(){return {format:'diorama-books',version:1,catalog:[],customers:[],nextCustomer:1,orders:[],receipts:[],anomalies:[],nextOrder:1,nextItem:1,nextAnomaly:1};}
 const text=(v,max=500)=>String(v??'').slice(0,max);
 const validDate=v=>typeof v==='string'&&Number.isFinite(Date.parse(v));
 function readArchive(raw,normalize){
  const input=typeof raw==='string'?JSON.parse(raw):raw;
  if(input?.format!=='diorama-books'||input.version!==1||!Array.isArray(input.catalog)||!Array.isArray(input.orders)||!Array.isArray(input.receipts))throw Error('Il file non è un archivio Diorama valido');
+ if(input.customers!==undefined&&!Array.isArray(input.customers))throw Error('Elenco clienti non valido');
  const next=emptyArchive(),catalogCodes=new Set(),orderIds=new Set(),itemIds=new Set(),received=new Map();
+ const customerIds=new Set(),known=new Map();
+ for(const c of input.customers||[]){
+  if(!Number.isSafeInteger(c.id)||c.id<1||customerIds.has(c.id)||typeof c.first_name!=='string'||typeof c.last_name!=='string'||!c.first_name.trim()||!c.last_name.trim()||c.first_name.length>100||c.last_name.length>100)throw Error('Cliente non valido nell’archivio');
+  next.customers.push({id:c.id,first_name:c.first_name,last_name:c.last_name});customerIds.add(c.id);next.nextCustomer=Math.max(next.nextCustomer,c.id+1);known.set(customerKey(c.first_name,c.last_name),c.id);
+ }
  for(const b of input.catalog){const code=normalize(String(b.isbn??''));if(!b.title||String(b.title).length>500||catalogCodes.has(code))throw Error('Catalogo non valido o ISBN duplicato');catalogCodes.add(code);next.catalog.push({isbn:code,title:text(b.title),author:text(b.author,300),publisher:text(b.publisher,300),year:text(b.year,100),volume:text(b.volume,100),languages:text(b.languages,100),origin:text(b.origin,100),source:'Catalogo libreria'});}
  for(const order of input.orders){
   if(!Number.isSafeInteger(order.id)||order.id<1||orderIds.has(order.id)||!order.first_name||!order.last_name||!validDate(order.created_at)||!Array.isArray(order.items)||!order.items.length)throw Error('Ordine non valido nell’archivio');
   orderIds.add(order.id);next.nextOrder=Math.max(next.nextOrder,order.id+1);
-  const copy={id:order.id,first_name:text(order.first_name,100),last_name:text(order.last_name,100),created_at:order.created_at,archived_at:order.archived_at??null,items:[]};
+  const copy={id:order.id,first_name:text(order.first_name,100),last_name:text(order.last_name,100),created_at:order.created_at,customer_id:order.customer_id??null,deposit_cents:storedCents(order.deposit_cents,'Acconto'),archived_at:order.archived_at??null,items:[]};
   for(const i of order.items){
    if(!Number.isSafeInteger(i.id)||i.id<1||itemIds.has(i.id)||!i.title||!Number.isInteger(i.quantity)||i.quantity<1||i.quantity>999||!Number.isInteger(i.received)||i.received<0||i.received>i.quantity)throw Error('Quantità o riga ordine non valida');
    itemIds.add(i.id);next.nextItem=Math.max(next.nextItem,i.id+1);received.set(i.id,i.received);
-   copy.items.push({id:i.id,order_id:order.id,isbn:normalize(String(i.isbn??'')),title:text(i.title),author:text(i.author,300),publisher:text(i.publisher,300),year:text(i.year,100),volume:text(i.volume,100),quantity:i.quantity,received:i.received});
+   copy.items.push({id:i.id,order_id:order.id,isbn:normalize(String(i.isbn??'')),title:text(i.title),author:text(i.author,300),publisher:text(i.publisher,300),year:text(i.year,100),volume:text(i.volume,100),quantity:i.quantity,received:i.received,unit_price_cents:storedCents(i.unit_price_cents,'Prezzo unitario')});
   }
   if(copy.archived_at!==null&&(!validDate(copy.archived_at)||copy.items.some(i=>i.received!==i.quantity)))throw Error('Ordine archiviato non valido: mancano copie o data di archiviazione');
+  moneyFields(copy,copy.items);
+  if(copy.customer_id===null){
+   const key=customerKey(copy.first_name,copy.last_name);let id=known.get(key);
+   if(!id){id=next.nextCustomer++;known.set(key,id);customerIds.add(id);next.customers.push({id,first_name:copy.first_name,last_name:copy.last_name});}
+   copy.customer_id=id;
+  }else if(!Number.isSafeInteger(copy.customer_id)||!customerIds.has(copy.customer_id))throw Error('Cliente dell’ordine non trovato nell’archivio');
   next.orders.push(copy);
  }
  const counts=new Map();
@@ -52,7 +113,7 @@ function readArchive(raw,normalize){
  }
  return next;
 }
-function archiveOrders(state){return [...state.orders].sort((a,b)=>b.created_at.localeCompare(a.created_at)||b.id-a.id).map(o=>{const copy=structuredClone(o);copy.total=copy.items.reduce((n,i)=>n+i.quantity,0);copy.received=copy.items.reduce((n,i)=>n+i.received,0);copy.status=copy.archived_at?'archiviato':copy.received===copy.total?'evaso':'pendente';return copy;});}
+function archiveOrders(state){return [...state.orders].sort((a,b)=>b.created_at.localeCompare(a.created_at)||b.id-a.id).map(o=>{const copy=structuredClone(o);copy.total=copy.items.reduce((n,i)=>n+i.quantity,0);copy.received=copy.items.reduce((n,i)=>n+i.received,0);Object.assign(copy,priceSummary(copy));copy.status=copy.archived_at?'archiviato':copy.received===copy.total?'evaso':'pendente';return copy;});}
 function archiveAnomalies(state){return structuredClone(state.anomalies).sort((a,b)=>b.created_at.localeCompare(a.created_at)||b.id-a.id);}
 function archiveOrder(state,value){
  const id=Number(value);if(!Number.isSafeInteger(id)||id<1)throw Error('Ordine non valido');
@@ -62,13 +123,22 @@ function archiveOrder(state,value){
  order.archived_at=order.archived_at||new Date().toISOString();
  return {next,result:{id,status:'archiviato',archived_at:order.archived_at}};
 }
+function archiveCustomers(state,first='',last=''){return customerSummaries(structuredClone(state.customers),archiveOrders(state),first,last);}
+function archiveCustomerOrders(state,value){const id=Number(value);if(!state.customers.some(c=>c.id===id))throw Error('Cliente non trovato');return archiveOrders(state).filter(o=>o.customer_id===id);}
 function archiveCreate(state,input,normalize){
- const first=String(input.first_name??'').trim(),last=String(input.last_name??'').trim();if(!first||!last||first.length>100||last.length>100)throw Error('Inserisci nome e cognome');
+ const first=String(input.first_name??'').trim(),last=String(input.last_name??'').trim();
+ const customer_id=input.customer_id===undefined||input.customer_id===null||input.customer_id===''?null:Number(input.customer_id);
+ if(customer_id!==null&&(!Number.isSafeInteger(customer_id)||customer_id<1))throw Error('Cliente non valido');
+ if(customer_id===null&&(!first||!last||first.length>100||last.length>100))throw Error('Inserisci nome e cognome');
  if(!Array.isArray(input.items)||!input.items.length||input.items.length>100)throw Error('Aggiungi almeno un libro');
- const items=input.items.map(i=>{const title=String(i.title??'').trim(),quantity=Number(i.quantity);if(!title||title.length>500||!Number.isInteger(quantity)||quantity<1||quantity>999)throw Error('Titolo o quantità non validi');return {title,author:text(i.author,300),publisher:text(i.publisher,300),year:text(i.year,100),volume:text(i.volume,100),isbn:normalize(String(i.isbn)),quantity,received:0,origin:text(i.source||'Manuale',100)};});
- const next=structuredClone(state),id=next.nextOrder++;
+ const items=input.items.map(i=>{const title=String(i.title??'').trim(),quantity=Number(i.quantity);if(!title||title.length>500||!Number.isInteger(quantity)||quantity<1||quantity>999)throw Error('Titolo o quantità non validi');return {title,author:text(i.author,300),publisher:text(i.publisher,300),year:text(i.year,100),volume:text(i.volume,100),isbn:normalize(String(i.isbn)),quantity,received:0,unit_price_cents:i.unit_price!==undefined?moneyCents(i.unit_price,'Prezzo unitario'):storedCents(i.unit_price_cents,'Prezzo unitario'),origin:text(i.source||'Manuale',100)};});
+ const {deposit_cents}=moneyFields(input,items);
+ const next=structuredClone(state);let customer=customer_id?next.customers.find(c=>c.id===customer_id):null;
+ if(customer_id&&!customer)throw Error('Cliente non trovato');
+ if(!customer){customer={id:next.nextCustomer++,first_name:first,last_name:last};next.customers.push(customer);}
+ const id=next.nextOrder++;
  for(const item of items){item.id=next.nextItem++;item.order_id=id;if(!next.catalog.some(b=>b.isbn===item.isbn))next.catalog.push({isbn:item.isbn,title:item.title,author:item.author,publisher:item.publisher,year:item.year,volume:item.volume,origin:item.origin,languages:'',source:'Catalogo libreria'});}
- next.orders.push({id,first_name:first,last_name:last,created_at:new Date().toISOString(),archived_at:null,items});return {next,id};
+ next.orders.push({id,first_name:customer.first_name,last_name:customer.last_name,customer_id:customer.id,deposit_cents,created_at:new Date().toISOString(),archived_at:null,items});return {next,id};
 }
 function archiveScan(state,value,normalize){
  const code=normalize(String(value));const next=structuredClone(state);
@@ -118,19 +188,37 @@ async function openLibrary(query,code,fetcher) {
 }
 
 const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let orders=[],anomalies=[],cart=[],filter='pendente',history=[];
+let orders=[],anomalies=[],customers=[],selectedCustomer=null,cart=[],filter='pendente',history=[];
+const euro=cents=>cents===undefined||cents===null?'Non registrato':new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(cents/100);
+const stateLabel={pendente:'Pendente',evaso:'Evaso',archiviato:'Archiviato'};
 const archiveStorageKey='diorama.local-archive.v1';
-let archiveState=emptyArchive(),archiveHandle=null,archiveAuthenticated=false,archiveCache=true;
+let archiveState=emptyArchive(),archiveHandle=null,archiveAuthenticated=false,archiveCache=true,archiveLoadError=false,archiveRaw=null,archiveDirectory=null;
 let archiveSaveQueue=Promise.resolve();
-try{const raw=localStorage.getItem(archiveStorageKey);if(raw)archiveState=readArchive(raw,normalize);}catch{archiveCache=false;}
+try{archiveRaw=localStorage.getItem(archiveStorageKey);}catch{archiveCache=false;}
+if(archiveRaw){try{archiveState=readArchive(archiveRaw,normalize);}catch{archiveLoadError=true;}}
 try{archiveAuthenticated=sessionStorage.getItem(archiveStorageKey+'.session')==='yes';}catch{}
-function archiveNotice(message){$('#archive-notice').textContent=message|| (archiveHandle?'Salvataggio automatico su '+archiveHandle.name:'Archivio nel browser. Salva o scarica il file JSON per conservarlo.');}
-async function writeArchiveFile(handle,next){const writer=await handle.createWritable();try{await writer.write(JSON.stringify(next,null,2));await writer.close();}catch(e){await writer.abort().catch(()=>{});throw e;}}
+function archiveNotice(message){
+ const notice=$('#archive-notice');
+ notice.textContent=archiveLoadError?'Archivio del browser non leggibile: le scritture sono bloccate. Scarica i dati originali o una copia di recupero, poi apri il JSON corretto.':message|| (archiveHandle?'Salvataggio automatico su '+archiveHandle.name:archiveCache?'Dati nel browser: scegli Cartella dati o salva il JSON prima di aggiornare l’app.':'Salvataggio nel browser non disponibile: scegli Cartella dati o Salva su file.');
+ notice.classList.toggle('error',archiveLoadError);
+}
+function ensureArchiveWritable(){if(archiveLoadError)throw Error('Archivio non leggibile: apri un JSON valido prima di scrivere nuovi dati. I dati originali sono conservati.');}
+async function writeArchiveFile(handle,next){const writer=await handle.createWritable();try{await writer.write(typeof next==='string'?next:JSON.stringify(next,null,2));await writer.close();}catch(e){await writer.abort().catch(()=>{});throw e;}}
+async function backupDirectory(directory,raw){
+ if(!raw)return;
+ await writeArchiveFile(await directory.getFileHandle('dioramaBooks-recupero.json',{create:true}),raw);
+ const dated='dioramaBooks-backup-'+new Date().toISOString().slice(0,10)+'.json';
+ let existing=null;try{existing=await directory.getFileHandle(dated);}catch(e){if(e.name!=='NotFoundError')throw e;}
+ if(!existing||(await existing.getFile()).size===0)await writeArchiveFile(existing||await directory.getFileHandle(dated,{create:true}),raw);
+}
 async function commitArchive(next){
- if(archiveHandle){try{await writeArchiveFile(archiveHandle,next);}catch{throw Error('Salvataggio su file non riuscito. La modifica non è stata applicata: verifica i permessi e riprova.');}}
- try{localStorage.setItem(archiveStorageKey,JSON.stringify(next));archiveCache=true;}catch{archiveCache=false;if(!archiveHandle)throw Error('Non posso conservare i dati nel browser. Prima scegli un archivio con Salva su file, poi riprova.');}
- archiveState=next;
- archiveNotice(archiveHandle?'Salvato su '+archiveHandle.name+' · '+new Date().toLocaleTimeString('it-IT'):archiveCache?'Modifiche salvate nel browser. Scarica l’archivio JSON per conservarle.':'Salvataggio del browser non disponibile. Scarica l’archivio prima di chiudere.');
+ ensureArchiveWritable();const raw=JSON.stringify(next);
+ if(!archiveHandle){let current;try{current=localStorage.getItem(archiveStorageKey);}catch{throw Error('Archivio del browser non accessibile. Scegli una cartella dati prima di continuare.');}if(current!==archiveRaw)throw Error('L’archivio è stato modificato in un’altra scheda. Ricarica la pagina prima di continuare.');}
+
+ if(archiveHandle){try{if(archiveHandle.getFile){const current=await archiveHandle.getFile();if(JSON.stringify(readArchive(await current.text(),normalize))!==JSON.stringify(readArchive(archiveState,normalize)))throw Error('Il file è stato modificato altrove: riaprilo prima di continuare.');}if(archiveDirectory)await backupDirectory(archiveDirectory,archiveRaw||JSON.stringify(archiveState));await writeArchiveFile(archiveHandle,next);}catch(e){throw Error('Salvataggio su file non riuscito. La modifica non è stata applicata: '+(e.message.includes('modificato altrove')?e.message:'verifica i permessi e riprova.'));}}
+ try{backupArchive(localStorage,archiveStorageKey,archiveRaw);localStorage.setItem(archiveStorageKey,raw);archiveCache=true;}catch{archiveCache=false;if(!archiveHandle)throw Error('Non posso conservare i dati e la copia di recupero nel browser. Scegli Cartella dati o Salva su file, poi riprova.');}
+ archiveState=next;archiveRaw=raw;
+ archiveNotice(archiveHandle?'Salvato su '+archiveHandle.name+' · '+new Date().toLocaleTimeString('it-IT')+(archiveDirectory?' · copie di recupero nella cartella.':' · conserva una copia con Scarica JSON.'):'Salvato nel browser · scarica il JSON a fine giornata e prima di cambiare versione.');
 }
 function mutateArchive(action){const operation=archiveSaveQueue.then(action);archiveSaveQueue=operation.catch(()=>{});return operation;}
 async function api(path,method='GET',data){
@@ -159,6 +247,9 @@ async function api(path,method='GET',data){
   try{const remote=await openLibrary(q,code,fetch);const seen=new Set(),books=[];for(const b of remote){let normalized;try{normalized=normalize(String(b.isbn));}catch{continue;}if(code&&code!==normalized||seen.has(normalized))continue;seen.add(normalized);books.push({...b,isbn:normalized});}return {books,warnings:['Risultati da Open Library: verifica edizione e ISBN.']};}
   catch{return {books:[],warnings:['Catalogo online non disponibile. Importa il CSV o inserisci il libro manualmente.']};}
  }
+ if(path.split('?')[0]==='customers'&&method==='GET'){const query=new URLSearchParams(path.split('?')[1]||'');return archiveCustomers(archiveState,query.get('first_name')||'',query.get('last_name')||'');}
+ const customerMatch=/^customers\/(\d+)\/orders$/.exec(path);
+ if(customerMatch&&method==='GET')return archiveCustomerOrders(archiveState,customerMatch[1]);
  if(path==='orders'&&method==='GET')return archiveOrders(archiveState);
  if(path==='anomalies'&&method==='GET')return archiveAnomalies(archiveState);
  const archiveMatch=/^orders\/(\d+)\/archive$/.exec(path);
@@ -168,28 +259,44 @@ async function api(path,method='GET',data){
  throw Error('Operazione non disponibile');
 }
 function requireArchiveLogin(){if(!archiveAuthenticated){toast('Accedi con diorama / diorama.');return false;}return true;}
-function downloadArchive(){if(!requireArchiveLogin())return;const blob=new Blob([JSON.stringify(archiveState,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='dioramaBooks-archivio.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);archiveNotice('Download avviato: conserva dioramaBooks-archivio.json e riaprilo per continuare.');}
-async function openArchive(file,handle=null){
+function downloadJSON(raw,name){const blob=new Blob([raw],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function downloadArchive(){if(!requireArchiveLogin())return;downloadJSON(archiveLoadError?archiveRaw||'':JSON.stringify(archiveState,null,2),archiveLoadError?'dioramaBooks-dati-originali.json':'dioramaBooks-archivio.json');archiveNotice('Download avviato: conserva il JSON fuori dalla cartella dell’app e riaprilo nella nuova versione.');}
+function downloadRecovery(){if(!requireArchiveLogin())return;try{const entries=JSON.parse(localStorage.getItem(archiveStorageKey+'.backups')||'[]');const valid=entries.find(e=>{try{readArchive(e.raw,normalize);return true;}catch{return false;}});if(!valid)throw Error('Nessuna copia di recupero disponibile.');downloadJSON(valid.raw,'dioramaBooks-recupero-'+valid.saved_at.replace(/[:.]/g,'-')+'.json');toast('Copia di recupero scaricata. Aprila con Apri archivio per verificarla.');}catch(e){toast(e.message);}}
+async function openArchive(file,handle=null,directory=null){
  if(file.size>50000000)throw Error('Archivio troppo grande: massimo 50 MB');
- const next=readArchive(await file.text(),normalize);
- if((archiveState.orders.length||archiveState.catalog.length)&&!confirm('Aprire questo archivio al posto di quello corrente? Prima di cambiare archivio conserva una copia con Scarica JSON.'))return;
- await mutateArchive(async()=>{archiveHandle=handle;archiveState=next;
- try{localStorage.setItem(archiveStorageKey,JSON.stringify(next));}catch{}
- history=[];$('#scan-result').textContent='';$('#scan-history').innerHTML='<p>Le prossime scansioni compariranno qui.</p>';await load();archiveNotice(handle?'Archivio aperto: '+file.name+' · modifiche salvate automaticamente.':'Archivio aperto: '+file.name+' · scarica il JSON aggiornato dopo le modifiche.');toast('Archivio aperto.');});
+ const raw=await file.text(),next=readArchive(raw,normalize);
+ if(!archiveLoadError&&JSON.stringify(next)!==JSON.stringify(readArchive(archiveState,normalize))&&(archiveState.orders.length||archiveState.catalog.length)&&!confirm('Aprire questo archivio al posto di quello corrente? Scarica prima il JSON corrente se vuoi conservarlo anche fuori dal browser.'))return;
+ await mutateArchive(async()=>{
+  try{backupArchive(localStorage,archiveStorageKey,archiveRaw);localStorage.setItem(archiveStorageKey,raw);archiveCache=true;}catch{archiveCache=false;if(!handle)throw Error('Non posso conservare il file nel browser. Scegli una cartella dati oppure libera spazio dopo aver scaricato i dati originali.');}
+  archiveHandle=handle;archiveDirectory=directory;archiveState=next;archiveRaw=raw;archiveLoadError=false;
+  history=[];selectedCustomer=null;$('#scan-result').textContent='';$('#scan-history').innerHTML='<p>Le prossime scansioni compariranno qui.</p>';await load();archiveNotice(handle?'Archivio aperto: '+file.name+' · salvataggio automatico'+(directory?' e copie di recupero nella cartella.':'.'):'Archivio aperto: '+file.name+' · scarica il JSON aggiornato dopo le modifiche.');toast('Archivio aperto.');
+ });
+}
+async function selectArchiveDirectory(){
+ if(!requireArchiveLogin())return;
+ if(!window.showDirectoryPicker){toast('Per la cartella dati usa Chrome o Edge sul computer. Puoi anche aprire e scaricare il JSON.');return;}
+ try{
+  const directory=await showDirectoryPicker({mode:'readwrite',id:'dioramaBooks-data'});
+  let handle;try{handle=await directory.getFileHandle('dioramaBooks-archivio.json');}catch(e){if(e.name!=='NotFoundError')throw e;}
+  if(handle){await openArchive(await handle.getFile(),handle,directory);return;}
+  ensureArchiveWritable();
+  await mutateArchive(async()=>{handle=await directory.getFileHandle('dioramaBooks-archivio.json',{create:true});const raw=JSON.stringify(archiveState,null,2);await backupDirectory(directory,raw);await writeArchiveFile(handle,raw);archiveHandle=handle;archiveDirectory=directory;});
+  archiveNotice('Cartella dati collegata: archivio, copia precedente e copia giornaliera salvati separatamente dall’app.');toast('Cartella dati pronta. Riaprila a ogni avvio.');
+ }catch(e){if(e.name!=='AbortError')toast(e.message);}
 }
 
 function showLogin(){$('#app').classList.add('hidden');$('#login').classList.remove('hidden');$('#order-dialog').close();}
 function toast(text){$('#toast').textContent=text;$('#toast').classList.remove('hidden');setTimeout(()=>$('#toast').classList.add('hidden'),3500);}
 const date=s=>new Date(s).toLocaleString('it-IT',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-async function load(){const data=await Promise.all([api('orders'),api('anomalies')]);[orders,anomalies]=data;renderOrders();renderAnomalies();await loadCatalog();}
+async function load(){const data=await Promise.all([api('orders'),api('anomalies'),api('customers')]);[orders,anomalies,customers]=data;renderOrders();renderAnomalies();renderCustomers();await loadCatalog();}
 async function enter(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');await load();}
 $('#today').textContent=new Date().toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
 $('#login-form').onsubmit=async e=>{e.preventDefault();const button=e.submitter||e.target.querySelector('button');button.disabled=true;$('#login-error').textContent='';try{await api('login','POST',Object.fromEntries(new FormData(e.target)));e.target.reset();await enter();}catch(err){showLogin();$('#login-error').textContent=err.message;}finally{button.disabled=false;}};
-$('#logout').onclick=async()=>{try{await api('logout','POST',{});orders=[];anomalies=[];cart=[];history=[];$('#scan-history').innerHTML='<p>Le prossime scansioni compariranno qui.</p>';$('#scan-result').textContent='';showLogin();}catch(e){toast(e.message);}};
+$('#logout').onclick=async()=>{try{await api('logout','POST',{});orders=[];anomalies=[];customers=[];selectedCustomer=null;cart=[];history=[];$('#scan-history').innerHTML='<p>Le prossime scansioni compariranno qui.</p>';$('#scan-result').textContent='';showLogin();}catch(e){toast(e.message);}};
 $('#mobile-logout').onclick=()=>$('#logout').click();
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{
  document.querySelectorAll('[data-view]').forEach(n=>n.classList.toggle('active',n===b));
- for(const view of ['orders','catalog','receive','anomalies'])$('#'+view+'-view').classList.toggle('hidden',b.dataset.view!==view);
+ for(const view of ['orders','customers','catalog','receive','anomalies'])$('#'+view+'-view').classList.toggle('hidden',b.dataset.view!==view);
  if(b.dataset.view==='receive')$('#scan-isbn').focus();
  if(b.dataset.view==='catalog')loadCatalog().catch(e=>toast(e.message));
 });
@@ -199,29 +306,67 @@ function renderOrders(){
  $('#archived-count').textContent=orders.filter(o=>o.status==='archiviato').length;
  const q=$('#order-search').value.toLowerCase().trim();
  const shown=orders.filter(o=>o.status===filter&&`${o.first_name} ${o.last_name} ${o.items.map(i=>i.title+' '+i.isbn).join(' ')}`.toLowerCase().includes(q));
- $('#order-list').innerHTML=shown.length?`<table><thead><tr><th>CLIENTE</th><th>LIBRI RICHIESTI</th><th>INSERITO IL</th><th>STATO</th></tr></thead><tbody>${shown.map(o=>`<tr><td><div class="customer"><div class="avatar">${esc(o.first_name[0]+o.last_name[0])}</div><div><strong>${esc(o.first_name)} ${esc(o.last_name)}</strong><span class="sub">Ordine #${o.id}</span></div></div></td><td>${o.items.map(i=>`<div class="item-line"><strong>${esc(i.title)}</strong>${i.volume||i.publisher||i.year?`<span class="sub">${esc([i.volume?'Volume '+i.volume:'',i.publisher,i.year].filter(Boolean).join(' · '))}</span>`:''}<span class="sub">${esc(i.isbn)} · ${i.received}/${i.quantity} copie ricevute</span></div>`).join('')}</td><td>${esc(date(o.created_at))}</td><td><span class="badge ${o.status}">${{pendente:'Pendente',evaso:'Evaso',archiviato:'Archiviato'}[o.status]}</span><span class="sub">${o.received}/${o.total} copie</span>${o.status==='evaso'?`<button type="button" class="secondary archive-order" data-archive="${o.id}">Archivia</button>`:''}${o.archived_at?`<span class="sub">Archiviato il ${esc(date(o.archived_at))}</span>`:''}</td></tr>`).join('')}</tbody></table>`:`<div class="empty"><div class="empty-icon">⌑</div><h2>${orders.length?{pendente:'Nessun ordine pendente',evaso:'Nessun ordine evaso',archiviato:'Nessun ordine archiviato'}[filter]:'La prossima storia comincia qui'}</h2><p>${orders.length?'Le nuove richieste sono pendenti. La scansione dell’ultima copia le rende evase; Archivia le sposta nello storico.':'Aggiungi la prima richiesta di un lettore. Al resto pensiamo insieme.'}</p>${orders.length?'':'<button class="secondary" id="empty-add">＋ Crea il primo ordine</button>'}</div>`;
+ $('#order-list').innerHTML=shown.length?orderTable(shown):`<div class="empty"><div class="empty-icon">⌑</div><h2>${orders.length?{pendente:'Nessun ordine pendente',evaso:'Nessun ordine evaso',archiviato:'Nessun ordine archiviato'}[filter]:'La prossima storia comincia qui'}</h2><p>${orders.length?'Le nuove richieste sono pendenti. La scansione dell’ultima copia le rende evase; Archivia le sposta nello storico.':'Aggiungi la prima richiesta di un lettore.'}</p>${orders.length?'':'<button class="secondary" id="empty-add">＋ Crea il primo ordine</button>'}</div>`;
  $('#list-footer').textContent=`${shown.length} ${shown.length===1?'ordine':'ordini'} · Ordinati dal più recente`;
- if($('#empty-add'))$('#empty-add').onclick=openOrder;
+ if($('#empty-add'))$('#empty-add').onclick=()=>openOrder();
 }
+function orderTable(list){return `<div class="table-scroll"><table><thead><tr><th>CLIENTE</th><th>LIBRI RICHIESTI</th><th>IMPORTI</th><th>INSERITO IL</th><th>STATO</th></tr></thead><tbody>${list.map(o=>`<tr><td><div class="customer"><div class="avatar">${esc(o.first_name[0]+o.last_name[0])}</div><div><button class="customer-link" type="button" data-customer="${o.customer_id}">${esc(o.first_name)} ${esc(o.last_name)}</button><span class="sub">Ordine #${o.id} · Cliente #${o.customer_id}</span></div></div></td><td>${o.items.map(i=>`<div class="item-line"><strong>${esc(i.title)}</strong><span class="sub">${esc([i.volume?'Volume '+i.volume:'',i.publisher,i.year].filter(Boolean).join(' · '))}</span><span class="sub">${esc(i.isbn)} · ${i.received}/${i.quantity} copie ricevute</span><span class="sub">${esc(euro(i.unit_price_cents))} per copia · ${esc(euro(i.unit_price_cents==null?null:i.unit_price_cents*i.quantity))} per ${i.quantity} ${i.quantity===1?'copia':'copie'}</span></div>`).join('')}</td><td class="amount-cell"><strong>Totale ${esc(euro(o.total_amount_cents))}</strong><span class="sub">Acconto ${esc(euro(o.deposit_cents))}</span><span class="sub">Da saldare ${esc(euro(o.balance_cents))}</span></td><td>${esc(date(o.created_at))}</td><td><span class="badge ${o.status}">${stateLabel[o.status]}</span><span class="sub">${o.received}/${o.total} copie</span>${o.status==='evaso'?`<button type="button" class="secondary archive-order" data-archive="${o.id}">Archivia</button>`:''}${o.archived_at?`<span class="sub">Archiviato il ${esc(date(o.archived_at))}</span>`:''}</td></tr>`).join('')}</tbody></table></div>`;}
+function renderCustomers(){
+ const shown=customerSummaries(customers,orders,$('#customer-first-search').value,$('#customer-last-search').value);
+ $('#customer-list').innerHTML=shown.length?`<table><thead><tr><th>CLIENTE</th><th>PENDENTI</th><th>CHIUSI</th><th>TOTALE ORDINI</th></tr></thead><tbody>${shown.map(c=>`<tr><td><button type="button" class="customer-link" data-customer="${c.id}">${esc(c.first_name)} ${esc(c.last_name)}</button><span class="sub">Cliente #${c.id}</span></td><td>${c.pending_count}</td><td>${c.closed_count}<span class="sub">Evasi e archiviati</span></td><td>${c.order_count}</td></tr>`).join('')}</tbody></table>`:'<div class="empty"><h2>Nessun cliente trovato</h2><p>I nuovi clienti vengono registrati al salvataggio del primo ordine.</p></div>';
+ $('#customer-footer').textContent=`${shown.length} clienti visualizzati · ${customers.length} clienti registrati`;
+ if(selectedCustomer!==null){const c=customers.find(c=>c.id===selectedCustomer);if(c)renderCustomerDetail(c);else{$('#customer-detail').classList.add('hidden');selectedCustomer=null;}}
+}
+function renderCustomerDetail(customer){
+ const own=orders.filter(o=>o.customer_id===customer.id);
+ $('#customer-detail').classList.remove('hidden');$('#customer-detail-name').textContent=customer.first_name+' '+customer.last_name;
+ $('#customer-detail-summary').textContent=`Cliente #${customer.id} · ${own.filter(o=>o.status==='pendente').length} pendenti · ${own.filter(o=>o.status!=='pendente').length} chiusi`;
+ $('#customer-orders').innerHTML=own.length?orderTable(own):'<div class="empty">Nessun ordine associato.</div>';
+}
+function showCustomer(value){const c=customers.find(c=>c.id===Number(value));if(!c)return;selectedCustomer=c.id;document.querySelector('[data-view="customers"]').click();renderCustomerDetail(c);$('#customer-detail').scrollIntoView({behavior:'smooth',block:'start'});}
+$('#customer-search-form').onsubmit=e=>{e.preventDefault();renderCustomers();};
+$('#customer-first-search').oninput=renderCustomers;$('#customer-last-search').oninput=renderCustomers;
+$('#customer-new-order').onclick=()=>openOrder(selectedCustomer);
 function renderAnomalies(){
  $('#anomaly-count').textContent=anomalies.length;
  $('#anomaly-list').innerHTML=anomalies.length?`<table><thead><tr><th>ISBN SCANSIONATO</th><th>DATA E ORA</th><th>ANOMALIA</th></tr></thead><tbody>${anomalies.map(a=>`<tr><td><strong>${esc(a.isbn)}</strong><span class="sub">Una copia · Scansione #${a.id}</span></td><td>${esc(date(a.created_at))}</td><td><span class="badge">Senza ordine pendente</span></td></tr>`).join('')}</tbody></table>`:'<div class="empty"><h2>Nessuna anomalia</h2><p>Le scansioni senza una richiesta pendente compariranno qui.</p></div>';
  $('#anomaly-footer').textContent=`${anomalies.length} ${anomalies.length===1?'scansione senza ordine':'scansioni senza ordine'} · Registro conservato nell’archivio`;
 }
-$('#order-list').onclick=async e=>{
+async function orderActions(e){
+ const client=e.target.closest('[data-customer]');if(client){showCustomer(client.dataset.customer);return;}
  const button=e.target.closest('[data-archive]');if(!button)return;
  button.disabled=true;
  try{await api('orders/'+button.dataset.archive+'/archive','POST',{});toast('Ordine archiviato.');await load().catch(()=>toast('Ordine archiviato. Ricarica per aggiornare la lista.'));}catch(error){toast(error.message);button.disabled=false;}
-};
+}
+$('#order-list').onclick=orderActions;$('#customer-orders').onclick=orderActions;$('#customer-list').onclick=orderActions;
 document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(n=>n.classList.toggle('selected',n===b));renderOrders();});$('#order-search').oninput=renderOrders;
-function openOrder(){cart=[];$('#order-form').reset();$('#order-error').textContent='';$('#book-results').textContent='';renderCart();$('#order-dialog').showModal();$('#first-name').focus();}$('#new-order').onclick=openOrder;$('#close-dialog').onclick=()=>$('#order-dialog').close();
-function addBook(book){const existing=cart.find(i=>i.isbn===book.isbn);if(existing)existing.quantity++;else cart.push({...book,quantity:1});renderCart();}
-function renderCart(){$('#cart').innerHTML=cart.length?cart.map((i,n)=>`<div class="cart-item"><div><strong>${esc(i.title)}</strong><span class="sub">${esc([i.volume?'Volume '+i.volume:'',i.publisher,i.year,i.author,i.isbn].filter(Boolean).join(' · '))}</span></div><input type="number" min="1" max="999" value="${i.quantity}" data-qty="${n}" aria-label="Quantità ${esc(i.title)}"><button type="button" data-remove="${n}" aria-label="Rimuovi ${esc(i.title)}">×</button></div>`).join(''):'<p class="field-note">Nessun libro aggiunto. Cerca nel catalogo o inserisci un ISBN manualmente.</p>';document.querySelectorAll('[data-qty]').forEach(el=>el.oninput=()=>cart[Number(el.dataset.qty)].quantity=Number(el.value));document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{cart.splice(Number(b.dataset.remove),1);renderCart();});}
+function chooseCustomer(){const c=customers.find(c=>c.id===Number($('#order-customer').value));for(const [field,value] of [['#first-name',c?.first_name],['#last-name',c?.last_name]]){const input=$(field);input.readOnly=Boolean(c);input.value=value||'';}if(!c)$('#first-name').focus();}
+$('#order-customer').onchange=chooseCustomer;
+function openOrder(customerId=null){
+ cart=[];$('#order-form').reset();$('#order-customer').innerHTML='<option value="">＋ Crea un nuovo cliente</option>'+customers.map(c=>`<option value="${c.id}">${esc(c.first_name)} ${esc(c.last_name)} · Cliente #${c.id}</option>`).join('');
+ $('#order-customer').value=Number.isSafeInteger(customerId)?String(customerId):'';chooseCustomer();$('#order-error').textContent='';$('#book-results').textContent='';renderCart();$('#order-dialog').showModal();$('#order-customer').focus();
+}
+$('#new-order').onclick=()=>openOrder();$('#close-dialog').onclick=()=>$('#order-dialog').close();
+function addBook(book){const existing=cart.find(i=>i.isbn===book.isbn);if(existing)existing.quantity++;else cart.push({...book,quantity:1,unit_price:''});renderCart();}
+function renderCart(){
+ $('#cart').innerHTML=cart.length?cart.map((i,n)=>`<div class="cart-item"><div class="cart-book"><strong>${esc(i.title)}</strong><span class="sub">${esc([i.volume?'Volume '+i.volume:'',i.publisher,i.year,i.author,i.isbn].filter(Boolean).join(' · '))}</span></div><label>Copie<input type="number" min="1" max="999" required value="${i.quantity}" data-qty="${n}" aria-label="Quantità ${esc(i.title)}"></label><label>Prezzo per copia (€)<input inputmode="decimal" required maxlength="11" placeholder="0,00" value="${esc(i.unit_price)}" data-price="${n}" aria-label="Prezzo unitario ${esc(i.title)}"></label><span class="cart-line-total" data-line-total="${n}"></span><button type="button" data-remove="${n}" aria-label="Rimuovi ${esc(i.title)}">×</button></div>`).join(''):'<p class="field-note">Nessun libro aggiunto. Cerca nel catalogo o inserisci un ISBN manualmente.</p>';
+ document.querySelectorAll('[data-qty]').forEach(el=>el.oninput=()=>{cart[Number(el.dataset.qty)].quantity=Number(el.value);updateOrderAmounts();});
+ document.querySelectorAll('[data-price]').forEach(el=>el.oninput=()=>{cart[Number(el.dataset.price)].unit_price=el.value;updateOrderAmounts();});
+ document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{cart.splice(Number(b.dataset.remove),1);renderCart();});updateOrderAmounts();
+}
+function updateOrderAmounts(){
+ let total=0,complete=cart.length>0;
+ cart.forEach((item,index)=>{let value=null;try{const cents=moneyCents(item.unit_price);if(cents!==null&&Number.isInteger(item.quantity)&&item.quantity>0&&item.quantity<=999)value=cents*item.quantity;}catch{}if(value===null)complete=false;else total+=value;$('[data-line-total="'+index+'"]').textContent=value===null?'—':euro(value);});
+ const input=$('#order-deposit');let deposit=null;try{deposit=moneyCents(input.value);}catch{}
+ input.setCustomValidity(deposit===null?'Inserisci un acconto valido (0 se non versato).':complete&&deposit>total?'L’acconto non può superare il totale.':'');
+ $('#order-total').textContent=complete?euro(total):'Inserisci tutti i prezzi';$('#order-deposit-total').textContent=deposit===null?'—':euro(deposit);$('#order-balance').textContent=complete&&deposit!==null&&deposit<=total?euro(total-deposit):'—';
+}
+$('#order-deposit').oninput=updateOrderAmounts;
 function normalize(value){let s=String(value??'').replace(/[\s-]/g,'').toUpperCase();if(/^\d{9}[\dX]$/.test(s)){if([...s].reduce((a,c,i)=>a+(c==='X'?10:Number(c))*(10-i),0)%11)throw Error('ISBN non valido');s='978'+s.slice(0,9);s+=(10-[...s].reduce((a,c,i)=>a+Number(c)*(i%2?3:1),0)%10)%10;}if(!/^97[89]\d{10}$/.test(s)||[...s].reduce((a,c,i)=>a+Number(c)*(i%2?3:1),0)%10)throw Error('ISBN non valido');return s;}
 $('#manual-add').onclick=()=>{try{const title=$('#manual-title').value.trim();if(!title)throw Error('Inserisci il titolo');addBook({title,author:$('#manual-author').value.trim(),publisher:$('#manual-publisher').value.trim(),year:$('#manual-year').value.trim(),volume:$('#manual-volume').value.trim(),isbn:normalize($('#manual-isbn').value),source:'Manuale'});$('#manual-title').value='';$('#manual-author').value='';$('#manual-isbn').value='';$('#manual-publisher').value='';$('#manual-year').value='';$('#manual-volume').value='';$('#order-error').textContent='';}catch(e){$('#order-error').textContent=e.message;}};
 async function searchBooks(){const button=$('#find-book');button.disabled=true;$('#book-results').textContent='Ricerca nel catalogo…';try{const result=await api('books?q='+encodeURIComponent($('#book-query').value)+'&scope='+($('#book-online').checked?'online':'catalog'));const books=result.books;const warnings=result.warnings||[];$('#book-results').innerHTML=books.length?books.map((b,i)=>`<div class="book-result"><div><strong>${esc(b.title)}</strong><span class="sub">${esc(b.author)}</span><span class="sub">${esc([b.volume?'Volume '+b.volume:'',b.publisher,b.year,b.languages,b.source,b.origin].filter(Boolean).join(' · '))}</span><span class="sub">ISBN ${esc(b.isbn)}</span></div><button type="button" class="secondary" data-book="${i}">＋ Aggiungi</button></div>`).join(''):'<p>Nessun risultato con ISBN. Puoi inserire il libro manualmente.</p>';if(warnings.length)$('#book-results').insertAdjacentHTML('afterbegin',`<p class="catalog-warning">${warnings.map(esc).join('<br>')}</p>`);document.querySelectorAll('[data-book]').forEach(b=>b.onclick=()=>addBook(books[Number(b.dataset.book)]));}catch(e){$('#book-results').textContent=e.message;}finally{button.disabled=false;}}
 $('#find-book').onclick=searchBooks;$('#book-query').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();searchBooks();}};
-$('#order-form').onsubmit=async e=>{e.preventDefault();const button=$('#save-order');button.disabled=true;$('#order-error').textContent='';try{await api('orders','POST',{first_name:$('#first-name').value,last_name:$('#last-name').value,items:cart});$('#order-dialog').close();toast('Ordine salvato. Una nuova storia in attesa.');await load().catch(()=>toast('Ordine salvato. Ricarica la pagina per aggiornare la lista.'));}catch(err){$('#order-error').textContent=err.message;}finally{button.disabled=false;}};
+$('#order-form').onsubmit=async e=>{e.preventDefault();const button=$('#save-order');button.disabled=true;$('#order-error').textContent='';try{await api('orders','POST',{customer_id:$('#order-customer').value||null,first_name:$('#first-name').value,last_name:$('#last-name').value,deposit:$('#order-deposit').value,items:cart});$('#order-dialog').close();toast('Ordine salvato. Una nuova storia in attesa.');await load().catch(()=>toast('Ordine salvato. Ricarica la pagina per aggiornare la lista.'));}catch(err){$('#order-error').textContent=err.message;}finally{button.disabled=false;}};
 let scanning=false;
 $('#scan-form').onsubmit=async e=>{
  e.preventDefault();if(scanning)return;scanning=true;
@@ -277,6 +422,7 @@ archiveNotice();
 $('#login-form button').disabled=false;$('#login-error').textContent='';
 $('#archive-open').onclick=async()=>{if(!requireArchiveLogin())return;if(!window.showOpenFilePicker){$('#archive-input').click();return;}try{const [handle]=await showOpenFilePicker({multiple:false,types:[{description:'Archivio Diorama',accept:{'application/json':['.json']}}]});const permission=await handle.requestPermission({mode:'readwrite'});await openArchive(await handle.getFile(),permission==='granted'?handle:null);}catch(e){if(e.name!=='AbortError'){$('#archive-input').click();toast('Usa la selezione file. Il salvataggio avverrà con Scarica JSON.');}}};
 $('#archive-input').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{await openArchive(file);}catch(error){toast(error.message);}finally{e.target.value='';}};
-$('#archive-save').onclick=async()=>{if(!requireArchiveLogin())return;if(!window.showSaveFilePicker){downloadArchive();return;}try{const handle=archiveHandle||await showSaveFilePicker({suggestedName:'dioramaBooks-archivio.json',types:[{description:'Archivio Diorama',accept:{'application/json':['.json']}}]});await mutateArchive(async()=>{await writeArchiveFile(handle,archiveState);archiveHandle=handle;});archiveNotice('Salvato su '+archiveHandle.name+' · modifiche successive automatiche.');toast('Archivio salvato.');}catch(e){if(e.name!=='AbortError')toast('Salvataggio diretto non disponibile. Usa Scarica JSON.');}};
+$('#archive-save').onclick=async()=>{if(!requireArchiveLogin())return;if(!window.showSaveFilePicker){downloadArchive();return;}try{ensureArchiveWritable();const handle=archiveHandle||await showSaveFilePicker({suggestedName:'dioramaBooks-archivio.json',types:[{description:'Archivio Diorama',accept:{'application/json':['.json']}}]});await mutateArchive(async()=>{await writeArchiveFile(handle,archiveState);archiveHandle=handle;});archiveNotice('Salvato su '+archiveHandle.name+' · modifiche successive automatiche.');toast('Archivio salvato.');}catch(e){if(e.name!=='AbortError')toast('Salvataggio diretto non disponibile. Usa Scarica JSON.');}};
 $('#archive-download').onclick=downloadArchive;
+$('#archive-recovery').onclick=downloadRecovery;$('#archive-folder').onclick=selectArchiveDirectory;
 </script></body></html>

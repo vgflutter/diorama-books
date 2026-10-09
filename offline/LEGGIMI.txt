@@ -1,18 +1,67 @@
 dioramaBooks — VERSIONE LOCALE
 
+SE LA LIBRERIA STA GIÀ USANDO DIORAMABOOKS
+
+A. Nella VECCHIA versione premi Scarica JSON (oppure Salva su file).
+   Verifica che il file .json sia effettivamente salvato sul computer.
+   Conservalo in una cartella Dati Diorama separata dai file dell'app,
+   con una seconda copia su altro disco o servizio di backup.
+   Non cancellare la vecchia pagina o i dati del browser prima di questo passaggio.
+B. Estrai il nuovo ZIP in un'altra cartella, senza toccare i tuoi JSON.
+C. Apri la nuova dioramaBooks.html e accedi. Premi Apri archivio e scegli
+   il JSON esportato dalla versione precedente. Verifica clienti, ordini,
+   quantità ricevute e stati; i vecchi importi assenti sono "Non registrato".
+D. Collega Cartella dati (consigliato con Chrome/Edge), oppure Salva su file.
+   Da qui puoi continuare a lavorare sugli stessi dati.
+
+Lo ZIP contiene l'applicazione, non i dati della libreria. Non basta sostituire
+lo ZIP per trasferire i dati: un percorso o browser diverso può non vedere
+la precedente copia nel browser. Apri il tuo JSON, non un archivio vuoto.
+Gli ordini precedenti restano invariati; gli ordini storici con lo stesso
+nome e cognome vengono associati al medesimo cliente, perché la vecchia
+versione non distingueva gli omonimi. Per i nuovi ordini seleziona il cliente
+esistente oppure crea un cliente distinto.
+
+PRIMO AVVIO
+
 1. Estrai tutti i file dello ZIP in una cartella.
 2. Apri dioramaBooks.html con Chrome, Edge, Firefox o Safari.
    L’anteprima nella chat può bloccare JavaScript: aprire il file dal computer.
 3. Accedi con nome utente diorama e password diorama.
-4. Premi Salva su file per scegliere dioramaBooks-archivio.json.
+4. Consigliato: premi Cartella dati e scegli una cartella dedicata.
+   Se contiene dioramaBooks-archivio.json, l'app propone di aprirlo.
+   Altrimenti vi salva i dati correnti. A ogni modifica mantiene la copia
+   precedente dioramaBooks-recupero.json e una copia per giornata.
+   In alternativa premi Salva su file per scegliere dioramaBooks-archivio.json.
    Chrome/Edge supportano il salvataggio automatico nel file scelto.
    Se il browser non lo supporta, usa Scarica JSON dopo le modifiche.
-5. Al riavvio usa Apri archivio e scegli il JSON salvato.
+5. Al riavvio ricollega Cartella dati o usa Apri archivio con il JSON salvato.
+   I permessi del browser vanno rinnovati; il pulsante mostra lo stato del salvataggio.
+6. A fine giornata scarica anche una copia JSON e conservala su altro disco
+   o nel tuo servizio di backup. La cartella dati protegge dagli aggiornamenti,
+   una copia su un altro supporto protegge dalla perdita del computer.
 
 Il file JSON contiene catalogo, clienti, ordini, quantità, scansioni, archiviazioni e anomalie.
 La copia nel browser aiuta a continuare nella stessa sessione, ma per
 conservare e trasferire i dati devi salvare il file JSON e farne copie.
 Non modificare lo stesso archivio da più schede/browser contemporaneamente.
+
+CLIENTI E IMPORTI
+Nuovo ordine → seleziona un cliente esistente o crea un nuovo cliente.
+Inserisci prezzo per copia e quantità per ogni libro; il totale si aggiorna.
+Inserisci l'acconto già versato (0 se non versato): viene mostrato da saldare.
+Usa la virgola o il punto per i centesimi. L'acconto non può superare il totale.
+Clienti → cerca nome e/o cognome → apri il cliente per vedere ordini pendenti,
+evasi e archiviati, con importi e acconti.
+
+RECUPERO
+Il browser conserva fino a cinque copie precedenti: Copia di recupero
+scarica l'ultima leggibile. Per la cartella dati, Apri archivio può aprire
+il file di recupero o una copia giornaliera. Scarica una copia dell'archivio
+corrente prima di ripristinare. Un archivio non leggibile blocca le scritture;
+Scarica JSON permette di conservare i dati originali senza sovrascriverli.
+Il file viene scritto soltanto dopo averne verificato la coerenza; errori
+di scrittura non confermano ordini o scansioni come salvati.
 
 CATALOGO
 Catalogo → Aggiungi un libro: inserisci titolo e ISBN e premi Salva nel catalogo.

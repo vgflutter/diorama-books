@@ -13,11 +13,25 @@ La chat può mostrare un’anteprima HTML che non esegue JavaScript: scaricare i
 
 Aprire [offline/dioramaBooks.html](offline/dioramaBooks.html) nel browser, oppure estrarre lo ZIP locale e aprire `dioramaBooks.html`. Login iniziale: **diorama / diorama**. La pagina è autonoma e contiene HTML, CSS e JavaScript; non serve Node.js per usarla.
 
-`Salva su file` sceglie il JSON su cui Chrome/Edge possono salvare automaticamente. `Scarica JSON` e `Apri archivio` funzionano anche nei browser che non supportano l'accesso diretto ai file. Il JSON conserva catalogo, ordini, archiviazioni, scansioni e anomalie; una copia nel browser è soltanto un supporto locale. Aprire il JSON salvato quando si riprende su un altro browser o dispositivo. Usare una sola scheda per archivio. Il login locale non cifra i file. Gli archivi JSON precedenti sono compatibili: i nuovi campi vengono aggiunti alla lettura.
+**Cartella dati** (Chrome/Edge) collega una directory separata dall’app: contiene il JSON corrente, una copia precedente e una copia per giornata, scritte prima di modificare il file corrente. Ricollegarla a ogni avvio. `Salva su file` sceglie il JSON su cui Chrome/Edge possono salvare automaticamente. `Scarica JSON` e `Apri archivio` funzionano anche nei browser che non supportano l'accesso diretto ai file. Il JSON conserva catalogo, clienti, prezzi, acconti, ordini, archiviazioni, scansioni e anomalie; una copia nel browser è soltanto un supporto locale. Aprire il JSON salvato quando si riprende su un altro browser o dispositivo. Usare una sola scheda per archivio. Il login locale non cifra i file. Gli archivi JSON precedenti sono compatibili: i nuovi campi vengono aggiunti alla lettura.
 
 La ricerca locale/CSV e l'inserimento manuale funzionano senza Internet. Open Library è consultato per libri mancanti quando è raggiungibile dal browser; Google Books resta nel backend per mantenere la chiave sul server.
 
 Per rigenerare la pagina da sorgenti: `npm run build:local`. Istruzioni per il libraio in [offline/LEGGIMI.txt](offline/LEGGIMI.txt).
+
+## Aggiornare la versione già in uso
+
+Prima di inviare o aprire il nuovo ZIP, nella **vecchia app** usare **Scarica JSON** o **Salva su file** e verificare che il file esista sul computer. Conservarlo fuori dalla cartella dell’app e farne una seconda copia. Estrarre il nuovo ZIP in una cartella diversa, accedere e usare **Apri archivio** con quel JSON. Controllare ordini e ricevimenti, quindi collegare **Cartella dati** o **Salva su file**.
+
+Lo ZIP non contiene i dati operativi. Cambiare percorso, browser o dispositivo può rendere inaccessibile la vecchia cache: il JSON è il mezzo di trasferimento. La chiave di salvataggio del browser resta la stessa; l’app apre anche il formato precedente e conserva una copia prima di salvarne l’aggiornamento. Un dato corrotto blocca le scritture, senza sostituirlo con un archivio vuoto. **Copia di recupero** scarica l’ultima delle cinque copie locali leggibili; la cartella dati mantiene anche copie esterne. Per proteggersi da guasti del computer, copiare periodicamente il JSON su un altro supporto.
+
+## Clienti e importi
+
+Un nuovo ordine seleziona un cliente esistente oppure registra un nuovo cliente, anche omonimo, con un ID distinto. **Clienti** cerca nome e/o cognome e mostra gli ordini pendenti e chiusi (evasi e archiviati). Gli ordini precedenti senza identità cliente vengono raggruppati per nome e cognome normalizzati: allora gli omonimi non erano distinguibili.
+
+Ogni riga registra **prezzo per copia** e quantità. Il totale riguarda tutte le copie ordinate, l’**acconto** è riferito all’intero ordine e **da saldare** è totale meno acconto. Tutti gli importi sono interi in centesimi; prezzi e acconti negativi, più di due decimali e acconti superiori al totale sono rifiutati. I prezzi sono fotografie dell’ordine e non modificano il catalogo. I vecchi ordini senza importi mostrano **Non registrato**. La scansione modifica ricevimento e stato, senza cambiare prezzi o pagamenti.
+
+API protette: `GET /api/customers?first_name=...&last_name=...` e `GET /api/customers/:id/orders`. `POST /api/orders` accetta `customer_id` oppure nome/cognome, `deposit` in euro e `items[].unit_price` in euro. I dati persistiti e restituiti usano `deposit_cents`, `unit_price_cents`, `total_amount_cents` e `balance_cents`. Gli input precedenti senza importi restano compatibili e non inventano valori.
 
 ## Avvio della versione server
 
@@ -31,7 +45,7 @@ L’avvio abilita il proxy di rete supportato da Node.js (`--use-env-proxy`). Po
 
 ## Flusso
 
-1. Nuovo ordine: nome, cognome, ricerca per titolo/autore/ISBN, selezione dell'edizione e quantità. In alternativa inserire titolo e ISBN manualmente. La ricerca usa il catalogo della libreria; con Cerca anche online consulta anche Google Books e le edizioni italiane di Open Library; un ISBN cerca esattamente la sua edizione; editore, data, lingua e ISBN aiutano a riconoscere l'edizione. Il catalogo non garantisce copertura completa: verificare sempre il codice dell'edizione richiesta.
+1. Nuovo ordine: cliente esistente oppure nuovo nome e cognome, prezzo unitario per libro, quantità e acconto; ricerca per titolo/autore/ISBN, selezione dell'edizione e quantità. In alternativa inserire titolo e ISBN manualmente. La ricerca usa il catalogo della libreria; con Cerca anche online consulta anche Google Books e le edizioni italiane di Open Library; un ISBN cerca esattamente la sua edizione; editore, data, lingua e ISBN aiutano a riconoscere l'edizione. Il catalogo non garantisce copertura completa: verificare sempre il codice dell'edizione richiesta.
 2. Il server salva la data UTC automaticamente e mostra la data nell'ora locale del browser. Gli ordini iniziano pendenti.
 3. Ricevi libri: mantenere il campo ISBN attivo e scansionare con un lettore che invia il codice seguito da Invio. Si può anche digitare il codice. Ogni scansione equivale a una copia.
 4. Assegnazione al più vecchio ordine ancora pendente per lo stesso ISBN. A parità di data vale l'ID dell'ordine. Lo stato resta **pendente** finché mancano copie o titoli, con il progresso delle quantità visibile. La scansione dell’ultima copia rende l’ordine **evaso**. Il pulsante **Archivia**, disponibile solo per gli evasi, lo rende **archiviato** e conserva la data di archiviazione.
@@ -41,7 +55,7 @@ ISBN-10 e ISBN-13 vengono validati e normalizzati in ISBN-13. Le operazioni di r
 
 ## Configurazione e dati
 
-Per un utilizzo pubblico, configurare `DIORAMA_USER` e `DIORAMA_PASSWORD` con credenziali proprie, usare HTTPS e impostare `COOKIE_SECURE=true`. Non committare credenziali. Montare `DATA_DIR` su storage persistente e fare backup con strumenti compatibili con SQLite/WAL (per esempio API di backup SQLite). Non affidarsi al disco temporaneo di un hosting.
+Per un utilizzo pubblico, configurare `DIORAMA_USER` e `DIORAMA_PASSWORD` con credenziali proprie, usare HTTPS e impostare `COOKIE_SECURE=true`. Non committare credenziali. Montare `DATA_DIR` su storage persistente e fare backup con strumenti compatibili con SQLite/WAL (per esempio API di backup SQLite). Non affidarsi al disco temporaneo di un hosting. Le migrazioni aggiungono campi senza ricreare l’archivio. Prima della migrazione dei clienti, SQLite crea un file `.backup-<data>` consistente accanto al database. Mantenere la stessa `DATA_DIR` o `DATABASE_URL` negli aggiornamenti. Per PostgreSQL predisporre anche i backup del provider o `pg_dump`.
 
 È necessario accesso HTTPS a `openlibrary.org` e `www.googleapis.com` per le ricerche esterne; l'inserimento manuale funziona anche senza catalogo. I test automatici verificano database, persistenza, ISBN, FIFO, quantità, login e API. Non verificano l'hardware del lettore né la disponibilità del catalogo esterno. La pistola reale va provata con due copie dello stesso ISBN e un ordine con più titoli.
 
@@ -73,7 +87,7 @@ Il servizio ascolta sulla porta 3000. Il volume `diorama-data` mantiene il datab
 
 ## Dati persistenti e API
 
-Il backend scrive realmente nel database selezionato, SQLite o PostgreSQL. Le tabelle `catalog`, `orders`, `items` e `receipts` conservano rispettivamente schede libro, clienti/data ordine, titoli/ISBN/quantità/metadati dell'edizione e scansioni con data e ora. Gli unici tre stati sono pendente, evaso e archiviato. Le quantità ricevute determinano i primi due; `orders.archived_at` registra il passaggio allo storico. La tabella `anomalies` conserva ogni scansione senza un ordine pendente. Stati, ricevimenti e anomalie restano disponibili dopo un riavvio. Il catalogo e gli ordini vengono scritti nella stessa transazione quando si salva un nuovo ordine. Una nuova importazione CSV aggiorna il catalogo ma mantiene le informazioni storiche già salvate negli ordini.
+Il backend scrive realmente nel database selezionato, SQLite o PostgreSQL. Le tabelle `customers`, `catalog`, `orders`, `items` e `receipts` conservano rispettivamente clienti, schede libro, cliente/data/acconto dell’ordine, titoli/ISBN/quantità/prezzo/metadati dell’edizione e scansioni con data e ora. Gli unici tre stati sono pendente, evaso e archiviato. Le quantità ricevute determinano i primi due; `orders.archived_at` registra il passaggio allo storico. La tabella `anomalies` conserva ogni scansione senza un ordine pendente. Stati, ricevimenti e anomalie restano disponibili dopo un riavvio. Il catalogo e gli ordini vengono scritti nella stessa transazione quando si salva un nuovo ordine. Una nuova importazione CSV aggiorna il catalogo ma mantiene le informazioni storiche già salvate negli ordini.
 
 La ricerca locale comprende titolo, autore, editore, anno e volume, con più parole chiave. I libri inseriti manualmente o scelti dalle API vengono conservati nel catalogo alla creazione dell'ordine, senza sovrascrivere le schede già importate dal fornitore.
 

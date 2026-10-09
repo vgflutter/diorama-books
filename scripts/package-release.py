@@ -9,7 +9,7 @@ with ZipFile(out / 'dioramaBooks-locale.zip', 'w', ZIP_DEFLATED) as archive:
     archive.write(root / 'offline/LEGGIMI.txt', 'dioramaBooks/LEGGIMI.txt')
     archive.write(root / 'public/catalog-template.csv', 'dioramaBooks/modello-catalogo.csv')
     archive.write(root / 'demo/catalogo-esempio.csv', 'dioramaBooks/catalogo-esempio.csv')
-files = [root / p for p in ['.gitignore', '.dockerignore', 'README.md', 'Dockerfile', 'compose.yaml', 'package.json', 'package-lock.json', 'server.js', 'store.js', 'catalog.js', 'postgres-store.js']]
+files = [root / p for p in ['.gitignore', '.dockerignore', 'README.md', 'Dockerfile', 'compose.yaml', 'package.json', 'package-lock.json', 'server.js', 'store.js', 'order-data.js', 'catalog.js', 'postgres-store.js']]
 for folder in ['public', 'offline', 'demo', 'docs', 'scripts', 'test']:
     files.extend(p for p in (root / folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts)
 with ZipFile(out / 'dioramaBooks-server.zip', 'w', ZIP_DEFLATED) as archive:
